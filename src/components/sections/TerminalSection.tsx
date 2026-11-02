@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Section, SectionHeading } from "@/components/cyber/Section";
 import { ACHIEVEMENTS, EDUCATION, PROFILE, PROJECTS, SKILL_GROUPS } from "@/lib/portfolio-data";
 
-type Line = { kind: "in" | "out"; text: string };
+type Line = { kind: "in" | "out" | "err"; text: string };
 
 const HELP = [
   "Available commands:",
@@ -18,7 +18,7 @@ const HELP = [
   "  clear       wipe the console",
 ];
 
-function run(cmd: string): { out: string[]; clear?: boolean; open?: string } {
+function run(cmd: string): { out: string[]; clear?: boolean; open?: string; error?: boolean } {
   const c = cmd.trim().toLowerCase();
   switch (c) {
     case "":
@@ -57,7 +57,10 @@ function run(cmd: string): { out: string[]; clear?: boolean; open?: string } {
     case "clear":
       return { out: [], clear: true };
     default:
-      return { out: [`command not found: ${c}`, "type 'help' for available commands"] };
+      return {
+        out: [`[ERR] command not found: ${c}`, "type 'help' for available commands"],
+        error: true,
+      };
   }
 }
 
@@ -82,7 +85,10 @@ export function TerminalSection() {
       setLines((prev) => [
         ...prev,
         { kind: "in", text: value },
-        ...result.out.map((text) => ({ kind: "out" as const, text })),
+        ...result.out.map((text, idx) => ({
+          kind: (result.error && idx === 0 ? "err" : "out") as Line["kind"],
+          text,
+        })),
       ]);
     }
     if (result.open) window.open(result.open, "_blank", "noopener");
@@ -98,12 +104,12 @@ export function TerminalSection() {
       />
 
       <div className="hud-panel overflow-hidden">
-        <div className="flex items-center gap-2 border-b border-primary/20 bg-[#050505] px-4 py-3">
-          <span className="h-3 w-3 rounded-full bg-alert/80" />
-          <span className="h-3 w-3 rounded-full bg-primary/80" />
-          <span className="h-3 w-3 rounded-full bg-white/20" />
-          <span className="ml-3 font-mono text-xs text-muted-foreground tracking-widest">
-            TERMINAL // SECURE_SHELL
+        <div className="flex items-center gap-2 border-b border-border bg-background px-4 py-3">
+          <span className="h-3 w-3 rounded-full bg-alert" />
+          <span className="h-3 w-3 rounded-full bg-moss" />
+          <span className="h-3 w-3 rounded-full bg-primary" />
+          <span className="ml-3 font-mono text-xs text-primary tracking-widest">
+            TERMINAL <span className="text-alert">//</span> SECURE_SHELL
           </span>
         </div>
 
@@ -112,13 +118,24 @@ export function TerminalSection() {
           className="h-80 space-y-1 overflow-y-auto px-4 py-4 font-mono text-[13px] leading-relaxed"
         >
           {lines.map((l, i) => (
-            <p key={i} className={l.kind === "in" ? "text-foreground" : "text-foreground/80"}>
+            <p
+              key={i}
+              className={
+                l.kind === "in"
+                  ? "text-foreground"
+                  : l.kind === "err"
+                    ? "text-alert"
+                    : "text-primary/85"
+              }
+            >
               {l.kind === "in" ? (
                 <>
-                  <span className="text-alert">┌──(dhan㉿sec)-[~]</span>
+                  <span className="text-primary">
+                    ┌──(dhan<span className="text-alert">㉿</span>sec)-[~]
+                  </span>
                   <br />
                   <span className="text-alert">└─$ </span>
-                  <span className="text-foreground">{l.text}</span>
+                  <span className="text-alert font-semibold">{l.text}</span>
                 </>
               ) : (
                 <span className="whitespace-pre-wrap">{l.text}</span>
@@ -136,7 +153,7 @@ export function TerminalSection() {
               autoComplete="off"
               spellCheck={false}
               placeholder="type a command..."
-              className="flex-1 bg-transparent font-mono text-[13px] text-foreground caret-alert outline-none placeholder:text-muted-foreground/40"
+              className="flex-1 bg-transparent font-mono text-[13px] text-foreground caret-primary outline-none placeholder:text-moss/70"
             />
           </form>
         </div>

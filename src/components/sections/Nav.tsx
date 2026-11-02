@@ -34,16 +34,20 @@ export function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-30 transition-all duration-300 ${
-        scrolled ? "glass py-3 border-b border-primary/20" : "py-5"
+        scrolled ? "glass py-3 border-b border-border" : "bg-background/70 backdrop-blur-sm py-5"
       }`}
     >
       <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 sm:px-8">
         <a
           href="#hero"
-          className="flex items-center gap-2 font-display text-sm font-black tracking-[0.2em] text-primary"
+          className="flex items-center gap-2 font-display text-sm font-black tracking-[0.2em] text-foreground transition-colors hover:text-primary"
         >
-          <Shield className="h-4 w-4" />
-          DG<span className="text-muted-foreground">/SEC</span>
+          <Shield className="h-4 w-4 text-primary" />
+          DG
+          <span>
+            <span className="text-alert">/</span>
+            <span className="text-moss">SEC</span>
+          </span>
         </a>
 
         <ul className="hidden items-center gap-1 lg:flex">
@@ -51,10 +55,10 @@ export function Nav() {
             <li key={l.id}>
               <a
                 href={`#${l.id}`}
-                className={`rounded-md px-3 py-2 font-mono text-[11px] tracking-[0.2em] uppercase transition-all ${
+                className={`relative rounded-md px-3 py-2 font-mono text-[11px] tracking-[0.2em] uppercase transition-all ${
                   active === l.id
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "border border-primary/45 bg-primary/10 text-primary"
+                    : "border border-transparent text-foreground/75 after:absolute after:inset-x-3 after:bottom-1 after:h-[1.5px] after:origin-left after:scale-x-0 after:bg-alert after:transition-transform after:duration-200 hover:text-primary hover:after:scale-x-100"
                 }`}
               >
                 {l.label}
@@ -64,15 +68,17 @@ export function Nav() {
         </ul>
 
         <div className="flex items-center gap-6">
-          <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-alert animate-pulse" />
+          <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             SYSTEM ONLINE
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle navigation"
             aria-expanded={open}
-            className="rounded-md border border-border px-3 py-2 font-mono text-[11px] tracking-[0.2em] text-primary lg:hidden"
+            className={`rounded-md border bg-card px-3 py-2 font-mono text-[11px] tracking-[0.2em] text-primary transition-colors lg:hidden ${
+              open ? "border-alert/75" : "border-border hover:border-alert/65"
+            }`}
           >
             {open ? "CLOSE" : "MENU"}
           </button>
@@ -80,13 +86,17 @@ export function Nav() {
       </nav>
 
       {open && (
-        <ul className="glass mx-5 mt-3 grid gap-1 rounded-md p-3 lg:hidden">
+        <ul className="mx-5 mt-3 grid gap-1 rounded-md border border-border bg-card p-3 lg:hidden">
           {NAV_LINKS.map((l) => (
             <li key={l.id}>
               <a
                 href={`#${l.id}`}
                 onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 font-mono text-xs tracking-[0.2em] uppercase text-foreground/85"
+                className={`block rounded-md px-3 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors ${
+                  active === l.id
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-primary"
+                }`}
               >
                 {l.label}
               </a>

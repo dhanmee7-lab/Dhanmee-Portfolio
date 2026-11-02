@@ -73,14 +73,27 @@ export const SKILL_GROUPS: { title: string; code: string; items: string[] }[] = 
   { title: "Tooling", code: "OPS", items: ["Git", "GitHub", "Docker"] },
 ];
 
-export const PROJECTS = [
+export type ProjectItem = {
+  id: string;
+  name: string;
+  projectName: string;
+  subtitle: string;
+  description: string;
+  technologies: string[];
+  liveDemoUrl: string;
+  githubUrl: string;
+  visual: "dashboard" | "network" | "library";
+};
+
+export const PROJECTS: ProjectItem[] = [
   {
     id: "01",
     name: "AssetArc",
+    projectName: "AssetArc",
     subtitle: "Industrial Equipment Lifecycle Monitor",
     description:
       "AssetArc is a full-stack industrial asset lifecycle monitoring system developed using Java Spring Boot, React, JWT Authentication, MySQL, Hibernate, and REST APIs. It enables organizations to register assets, monitor equipment health, schedule preventive maintenance, assign technicians, manage maintenance history, and visualize operational dashboards.",
-    features: [
+    technologies: [
       "Role Based Authentication",
       "JWT Login",
       "Maintenance Scheduling",
@@ -91,15 +104,18 @@ export const PROJECTS = [
       "Spring Boot Backend",
       "MySQL Database",
     ],
-    visual: "dashboard" as const,
+    liveDemoUrl: "#",
+    githubUrl: "https://github.com/dhanmee7-lab/Asset-ARC",
+    visual: "dashboard",
   },
   {
     id: "02",
     name: "VeriSentinel",
+    projectName: "VeriSentinel",
     subtitle: "Real-Time Information Verification & Credibility Intelligence Platform",
     description:
       "VeriSentinel is an information verification platform designed to analyze digital content, assess credibility, identify potentially misleading information, and provide evidence-based verification insights through an intelligent analysis pipeline.",
-    features: [
+    technologies: [
       "Information Verification",
       "Credibility Analysis",
       "AI/ML",
@@ -109,15 +125,18 @@ export const PROJECTS = [
       "React",
       "Python",
     ],
-    visual: "network" as const,
+    liveDemoUrl: "#",
+    githubUrl: "https://github.com/dhanmee7-lab/VeriSentinel",
+    visual: "network",
   },
   {
     id: "03",
     name: "CivicNeuron",
+    projectName: "CivicNeuron",
     subtitle: "Civic Intelligence & Public Service Platform",
     description:
       "CivicNeuron is a civic technology platform designed to connect citizens with public services, simplify issue reporting, track civic requests, and provide data-driven insights for transparent community management.",
-    features: [
+    technologies: [
       "Civic Technology",
       "Smart Governance",
       "Issue Reporting",
@@ -127,7 +146,30 @@ export const PROJECTS = [
       "Spring Boot",
       "MySQL",
     ],
-    visual: "dashboard" as const,
+    liveDemoUrl: "#",
+    githubUrl: "https://github.com/dhanmee7-lab/CivicNeuron",
+    visual: "dashboard",
+  },
+  {
+    id: "04",
+    name: "AUREVIA",
+    projectName: "AUREVIA",
+    subtitle: "School Library Management System",
+    description:
+      "Aurevia is a full-stack School Library Management System designed to simplify library operations through efficient book management, member management, borrowing and returns, due-date tracking, overdue fine management, and analytical dashboards.",
+    technologies: [
+      "Spring Boot",
+      "Spring Data JPA",
+      "MySQL",
+      "REST APIs",
+      "JWT Authentication",
+      "Library Management",
+      "Dashboard",
+      "Responsive UI",
+    ],
+    liveDemoUrl: "#",
+    githubUrl: "https://github.com/dhanmee7-lab/Aurevia",
+    visual: "library",
   },
 ];
 

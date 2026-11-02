@@ -21,11 +21,11 @@ export function CursorGlow() {
         style={{
           left: pos.x,
           top: pos.y,
-          background: "radial-gradient(circle, rgba(212,175,55,0.12), transparent 65%)",
+          background: "radial-gradient(circle, rgba(57,255,136,0.06), transparent 65%)",
         }}
       />
       <div
-        className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/60"
+        className="absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/45"
         style={{ left: pos.x, top: pos.y, boxShadow: "var(--shadow-neon)" }}
       />
     </div>

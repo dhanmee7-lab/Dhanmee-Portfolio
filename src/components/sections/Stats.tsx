@@ -38,7 +38,11 @@ export function Stats() {
             transition={{ duration: 0.5, delay: i * 0.08 }}
             className="hud-panel p-7 text-center"
           >
-            <div className="font-display text-4xl font-black text-gradient-cyber sm:text-5xl">
+            <span
+              className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
+              aria-hidden="true"
+            />
+            <div className="font-display text-4xl font-black text-primary text-glow sm:text-5xl">
               {s.value === null ? (
                 s.suffix
               ) : (
@@ -48,7 +52,7 @@ export function Stats() {
                 </>
               )}
             </div>
-            <p className="mt-3 font-mono text-[11px] tracking-[0.28em] text-muted-foreground uppercase">
+            <p className="mt-3 font-mono text-[11px] tracking-[0.28em] text-primary/85 uppercase">
               {s.label}
             </p>
           </motion.div>

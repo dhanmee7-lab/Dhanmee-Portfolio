@@ -23,9 +23,14 @@ export function Skills() {
           >
             <TiltCard>
               <div className="hud-panel h-full p-6">
+                <span
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
+                  aria-hidden="true"
+                />
                 <div className="mb-5 flex items-center justify-between">
                   <h3 className="text-lg font-bold tracking-wide text-foreground">{group.title}</h3>
-                  <span className="font-mono text-[10px] tracking-[0.3em] text-primary/70">
+                  <span className="flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-primary">
+                    <span className="h-1 w-1 rounded-full bg-alert" aria-hidden="true" />
                     {group.code}
                   </span>
                 </div>
@@ -37,7 +42,7 @@ export function Skills() {
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.05 * i }}
-                      className="rounded-sm border border-primary/25 bg-[#0D0D0D] px-3 py-1.5 font-mono text-xs text-foreground/85 transition-colors hover:border-alert hover:text-alert"
+                      className="rounded-sm border border-moss/45 bg-background px-3 py-1.5 font-mono text-xs text-primary transition-colors hover:border-primary hover:bg-primary/10"
                     >
                       {item}
                     </motion.li>

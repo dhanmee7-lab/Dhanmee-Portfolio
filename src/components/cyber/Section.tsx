@@ -18,9 +18,20 @@ export function SectionHeading({
       transition={{ duration: 0.6 }}
       className="mb-12"
     >
-      <div className="flex items-center gap-3 font-mono text-xs tracking-[0.35em] text-primary/80">
-        <span className="h-px w-10 bg-primary/50" />
-        {code}
+      <div className="flex items-center gap-3 font-mono text-xs tracking-[0.35em] text-primary">
+        <span className="h-1.5 w-1.5 shrink-0 bg-alert" aria-hidden="true" />
+        <span className="h-px w-10 bg-moss/70" />
+        <span>
+          {code.includes("/") ? (
+            <>
+              {code.split("/")[0]}
+              <span className="text-alert">/</span>
+              {code.split("/").slice(1).join("/")}
+            </>
+          ) : (
+            code
+          )}
+        </span>
       </div>
       <h2 className="mt-4 text-3xl font-black uppercase sm:text-4xl md:text-5xl">
         <span className="text-foreground">{title}</span>

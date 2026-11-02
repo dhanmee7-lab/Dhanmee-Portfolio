@@ -13,7 +13,7 @@ export function Hero() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase"
+            className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-primary uppercase"
           >
             <div className="h-4 w-[2px] bg-alert" />
             CYBER SECURITY ENGINEERING STUDENT
@@ -24,7 +24,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.1 }}
-            className="text-6xl leading-[0.9] font-black uppercase sm:text-7xl xl:text-[5.5rem] tracking-tight flex flex-col"
+            className="text-[clamp(1.65rem,7.2vw,3.6rem)] leading-[0.95] font-black uppercase lg:text-6xl xl:text-[5.25rem] tracking-tight flex flex-col"
           >
             <span className="text-primary text-glow pb-2">DHANMEESWARAN</span>
             <span className="text-foreground">G</span>
@@ -78,28 +78,25 @@ export function Hero() {
             {/* Stats */}
             <div className="flex flex-wrap items-center gap-6 font-mono">
               <div className="flex flex-col">
-                <span className="text-2xl font-black text-primary">3+</span>
-                <span className="text-[10px] tracking-widest text-muted-foreground">PROJECTS</span>
+                <span className="text-2xl font-black text-primary text-glow">3+</span>
+                <span className="text-[10px] tracking-widest text-primary/85">PROJECTS</span>
               </div>
-              <div className="h-8 w-px bg-border hidden sm:block" />
+              <div className="h-8 w-px bg-moss/35 hidden sm:block" />
               <div className="flex flex-col">
-                <span className="text-2xl font-black text-primary">2+</span>
-                <span className="text-[10px] tracking-widest text-muted-foreground">
-                  TECH STACKS
-                </span>
+                <span className="text-2xl font-black text-primary text-glow">2+</span>
+                <span className="text-[10px] tracking-widest text-primary/85">TECH STACKS</span>
               </div>
-              <div className="h-8 w-px bg-border hidden sm:block" />
+              <div className="h-8 w-px bg-moss/35 hidden sm:block" />
               <div className="flex flex-col">
-                <span className="text-2xl font-black text-primary">∞</span>
-                <span className="text-[10px] tracking-widest text-muted-foreground">
-                  LEARNING ALWAYS
-                </span>
+                <span className="text-2xl font-black text-primary text-glow">∞</span>
+                <span className="text-[10px] tracking-widest text-primary/85">LEARNING ALWAYS</span>
               </div>
             </div>
 
             {/* Location */}
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-muted-foreground">
-              <div className="h-[1px] w-6 bg-alert" />
+            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-primary/90">
+              <span className="h-1.5 w-1.5 rounded-full bg-alert" aria-hidden="true" />
+              <div className="h-[1px] w-6 bg-moss" />
               TAMIL NADU, INDIA
             </div>
           </motion.div>
@@ -111,24 +108,26 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative border border-primary/20 bg-[#0D0D0D]/80 backdrop-blur-sm p-8 rounded-lg shadow-[0_0_30px_rgba(0,0,0,0.8)]"
+            className="relative border border-border bg-card/95 backdrop-blur-sm p-8 rounded-lg shadow-[0_0_30px_rgba(0,0,0,0.85)]"
           >
             {/* HUD Accents */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50" />
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/50" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/50" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/50" />
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-moss/60" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-alert/80" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-alert/80" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-moss/60" />
 
-            <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-8">
-              <div className="h-4 w-[2px] bg-alert" />
-              FOCUS AREAS // 2026
+            <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-primary uppercase mb-8">
+              <div className="h-4 w-[2px] bg-primary" />
+              <span>
+                FOCUS AREAS <span className="text-alert">//</span> 2026
+              </span>
             </div>
 
             <div className="flex flex-col space-y-6 font-mono text-sm sm:text-base tracking-widest text-right">
-              <span className="text-foreground border-b border-primary/10 pb-2">SECURITY</span>
-              <span className="text-foreground border-b border-primary/10 pb-2">INNOVATION</span>
-              <span className="text-foreground border-b border-primary/10 pb-2">RESILIENCE</span>
-              <span className="text-alert font-bold pt-2">A BETTER TOMORROW</span>
+              <span className="text-foreground border-b border-border pb-2">SECURITY</span>
+              <span className="text-foreground border-b border-border pb-2">INNOVATION</span>
+              <span className="text-foreground border-b border-border pb-2">RESILIENCE</span>
+              <span className="text-primary text-glow font-bold pt-2">A BETTER TOMORROW</span>
             </div>
           </motion.div>
         </div>
@@ -139,7 +138,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-primary/85"
       >
         <Mouse className="h-4 w-4 text-primary animate-bounce" />
         <span className="font-mono text-[9px] tracking-[0.4em] uppercase">SCROLL DOWN</span>

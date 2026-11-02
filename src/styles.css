@@ -36,6 +36,8 @@
   --color-ring: var(--ring);
   --color-cyber: var(--cyber);
   --color-cyber-glow: var(--cyber-glow);
+  --color-moss: var(--moss);
+  --color-emerald: var(--emerald);
   --color-signal: var(--signal);
   --color-alert: var(--alert);
   --color-grid: var(--grid);
@@ -46,42 +48,44 @@
 
 :root {
   --radius: 0.375rem;
-  --background: #050505;
+  --background: #000000;
   --foreground: #FFFFFF;
-  --card: #111111;
+  --card: #080B09;
   --card-foreground: #FFFFFF;
-  --popover: #0D0D0D;
+  --popover: #080B09;
   --popover-foreground: #FFFFFF;
-  --primary: #D4AF37;
-  --primary-foreground: #050505;
-  --secondary: #0D0D0D;
+  --primary: #39FF88;
+  --primary-foreground: #000000;
+  --secondary: #080B09;
   --secondary-foreground: #FFFFFF;
-  --muted: #111111;
-  --muted-foreground: #B8B8B8;
-  --accent: #FFD700;
-  --accent-foreground: #050505;
-  --destructive: #C1121F;
+  --muted: #080B09;
+  --muted-foreground: #A0A0A0;
+  --accent: #6D8F63;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF0000;
   --destructive-foreground: #FFFFFF;
-  --border: #2A2A2A;
-  --input: #2A2A2A;
-  --ring: #D4AF37;
+  --border: #263A2B;
+  --input: #263A2B;
+  --ring: #39FF88;
 
-  --cyber: #D4AF37;
-  --cyber-glow: #FFD700;
-  --signal: #C1121F;
-  --alert: #E63946;
-  --grid: #D4AF371a;
+  --moss: #6D8F63;
+  --emerald: #39FF88;
+  --cyber: #6D8F63;
+  --cyber-glow: #39FF88;
+  --signal: #6D8F63;
+  --alert: #FF0000;
+  --grid: #263A2B66;
 
-  --gradient-cyber: linear-gradient(120deg, var(--cyber), var(--cyber-glow));
+  --gradient-cyber: linear-gradient(120deg, var(--moss), var(--emerald));
   --gradient-shell: radial-gradient(
     ellipse at 50% -10%,
-    #D4AF3714,
+    #39FF880f,
     transparent 65%
   );
-  --shadow-neon: 0 0 0 1px #D4AF374d, 0 0 28px -8px #D4AF378c;
+  --shadow-neon: 0 0 0 1px #263A2B, 0 0 24px -10px #39FF882e;
   --shadow-neon-strong:
-    0 0 0 1px #D4AF378c, 0 0 45px -6px #D4AF37bf;
-  --shadow-signal: 0 0 0 1px #C1121F66, 0 0 30px -8px #C1121F99;
+    0 0 0 1px #39FF8880, 0 0 32px -8px #39FF8859;
+  --shadow-signal: 0 0 0 1px #6D8F6366, 0 0 24px -8px #6D8F634d;
 }
 
 .dark {
@@ -113,7 +117,8 @@
   }
 
   ::selection {
-    background: rgba(212, 175, 55, 0.3);
+    background: rgba(57, 255, 136, 0.22);
+    color: #FFFFFF;
   }
 
   ::-webkit-scrollbar {
@@ -123,20 +128,20 @@
     background: var(--background);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(212, 175, 55, 0.35);
+    background: rgba(109, 143, 99, 0.45);
     border-radius: 8px;
   }
 }
 
 @utility glass {
-  background: rgba(13, 13, 13, 0.65);
+  background: rgba(0, 0, 0, 0.88);
   backdrop-filter: blur(14px);
   border: 1px solid var(--border);
 }
 
 @utility hud-panel {
   position: relative;
-  background: rgba(13, 13, 13, 0.85);
+  background: rgba(8, 11, 9, 0.94);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-neon);
@@ -151,9 +156,7 @@
 }
 
 @utility text-glow {
-  text-shadow:
-    0 0 12px #D4AF378c,
-    0 0 40px #D4AF374d;
+  text-shadow: 0 0 18px rgba(57, 255, 136, 0.28);
 }
 
 @utility neon-ring {
@@ -167,8 +170,8 @@
 @utility scanlines {
   background-image: repeating-linear-gradient(
     to bottom,
-    rgba(212, 175, 55, 0.04) 0px,
-    rgba(212, 175, 55, 0.04) 1px,
+    rgba(109, 143, 99, 0.035) 0px,
+    rgba(109, 143, 99, 0.035) 1px,
     transparent 1px,
     transparent 4px
   );

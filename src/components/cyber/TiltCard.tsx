@@ -44,7 +44,7 @@ export function TiltCard({
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(320px circle at ${spot.x}% ${spot.y}%, rgba(212,175,55,0.14), transparent 70%)`,
+          background: `radial-gradient(320px circle at ${spot.x}% ${spot.y}%, rgba(57,255,136,0.08), transparent 70%)`,
         }}
         aria-hidden="true"
       />

@@ -42,14 +42,14 @@ export function CyberGlobe({ className = "" }: { className?: string }) {
 
       // atmosphere
       const glow = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, r * 1.5);
-      glow.addColorStop(0, "rgba(212,175,55,0.16)");
-      glow.addColorStop(1, "rgba(212,175,55,0)");
+      glow.addColorStop(0, "rgba(57,255,136,0.12)");
+      glow.addColorStop(1, "rgba(57,255,136,0)");
       ctx.fillStyle = glow;
       ctx.beginPath();
       ctx.arc(cx, cy, r * 1.5, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = "rgba(212,175,55,0.35)";
+      ctx.strokeStyle = "rgba(109,143,99,0.45)";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -60,7 +60,7 @@ export function CyberGlobe({ className = "" }: { className?: string }) {
         const lat = (i / 5) * (Math.PI / 2);
         const rr = Math.cos(lat) * r;
         const yy = cy + Math.sin(lat) * r;
-        ctx.strokeStyle = "rgba(212,175,55,0.16)";
+        ctx.strokeStyle = "rgba(109,143,99,0.22)";
         ctx.beginPath();
         ctx.ellipse(cx, yy, rr, rr * 0.28, 0, 0, Math.PI * 2);
         ctx.stroke();
@@ -70,13 +70,13 @@ export function CyberGlobe({ className = "" }: { className?: string }) {
       for (let i = 0; i < 12; i++) {
         const a = t + (i / 12) * Math.PI;
         const rx = Math.abs(Math.cos(a)) * r;
-        ctx.strokeStyle = `rgba(212,175,55,${0.06 + 0.14 * Math.abs(Math.sin(a))})`;
+        ctx.strokeStyle = `rgba(109,143,99,${0.08 + 0.16 * Math.abs(Math.sin(a))})`;
         ctx.beginPath();
         ctx.ellipse(cx, cy, rx, r, 0, 0, Math.PI * 2);
         ctx.stroke();
       }
 
-      // threat pings on the visible hemisphere
+      // telemetry pings on the visible hemisphere
       for (const p of pings) {
         const lon = p.lon + t * 2;
         const x = cx + Math.cos(p.lat) * Math.sin(lon) * r;
@@ -84,18 +84,18 @@ export function CyberGlobe({ className = "" }: { className?: string }) {
         const front = Math.cos(lon) > 0;
         if (!front) continue;
         const pulse = (t * 1.6 + p.phase) % 1;
-        ctx.fillStyle = "rgba(193,18,31,0.9)";
+        ctx.fillStyle = "rgba(57,255,136,0.9)";
         ctx.beginPath();
         ctx.arc(x, y, 1.8, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = `rgba(193,18,31,${0.5 * (1 - pulse)})`;
+        ctx.strokeStyle = `rgba(57,255,136,${0.45 * (1 - pulse)})`;
         ctx.beginPath();
         ctx.arc(x, y, 3 + pulse * 16, 0, Math.PI * 2);
         ctx.stroke();
       }
 
       // orbital ring
-      ctx.strokeStyle = "rgba(212,175,55,0.3)";
+      ctx.strokeStyle = "rgba(109,143,99,0.35)";
       ctx.beginPath();
       ctx.ellipse(cx, cy, r * 1.25, r * 0.34, Math.sin(t) * 0.5, 0, Math.PI * 2);
       ctx.stroke();
@@ -103,7 +103,7 @@ export function CyberGlobe({ className = "" }: { className?: string }) {
       const sat = t * 3;
       const sx = cx + Math.cos(sat) * r * 1.25;
       const sy = cy + Math.sin(sat) * r * 0.34;
-      ctx.fillStyle = "rgba(255,215,0,0.95)";
+      ctx.fillStyle = "rgba(57,255,136,0.95)";
       ctx.beginPath();
       ctx.arc(sx, sy, 2.6, 0, Math.PI * 2);
       ctx.fill();

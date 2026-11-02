@@ -20,7 +20,7 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: i * 0.06 }}
-              className="text-base leading-relaxed text-foreground/80 md:text-lg"
+              className="text-base leading-relaxed text-muted-foreground md:text-lg"
             >
               {p}
             </motion.p>
@@ -33,19 +33,26 @@ export function About() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative border border-primary/20 bg-[#0D0D0D]/80 backdrop-blur-sm p-10 rounded-lg shadow-[0_0_30px_rgba(0,0,0,0.8)] w-full max-w-sm"
+            className="relative border border-border bg-card/95 backdrop-blur-sm p-10 rounded-lg shadow-[0_0_30px_rgba(0,0,0,0.85)] w-full max-w-sm"
           >
             {/* HUD Accents */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50" />
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/50" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/50" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/50" />
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-moss/60" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-alert/80" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-alert/80" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-moss/60" />
+
+            <div className="mb-6 flex items-center justify-center gap-2 font-mono text-[9px] tracking-[0.3em] text-moss">
+              <span className="h-1.5 w-1.5 rounded-full bg-alert" aria-hidden="true" />
+              <span>
+                OPERATOR <span className="text-alert">//</span> DOCTRINE
+              </span>
+            </div>
 
             <div className="flex flex-col space-y-6 font-mono text-xl tracking-[0.4em] text-center">
-              <span className="text-muted-foreground border-b border-primary/10 pb-4">THINK</span>
-              <span className="text-muted-foreground border-b border-primary/10 pb-4">ANALYZE</span>
-              <span className="text-muted-foreground border-b border-primary/10 pb-4">SECURE</span>
-              <span className="text-alert font-bold pt-2">REPEAT</span>
+              <span className="text-foreground border-b border-moss/30 pb-4">THINK</span>
+              <span className="text-foreground border-b border-moss/30 pb-4">ANALYZE</span>
+              <span className="text-foreground border-b border-moss/30 pb-4">SECURE</span>
+              <span className="text-primary text-glow font-bold pt-2">REPEAT</span>
             </div>
           </motion.div>
         </div>

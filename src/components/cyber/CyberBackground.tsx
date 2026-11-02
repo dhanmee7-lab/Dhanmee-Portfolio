@@ -20,7 +20,7 @@ export function CyberBackground() {
 
     type Particle = { x: number; y: number; vx: number; vy: number; r: number; a: number };
     type Column = { x: number; y: number; speed: number; chars: string[] };
-    type Packet = { t: number; speed: number; lane: number };
+    type Packet = { t: number; speed: number; lane: number; alert?: boolean };
 
     let particles: Particle[] = [];
     let columns: Column[] = [];
@@ -56,11 +56,12 @@ export function CyberBackground() {
         chars: Array.from({ length: 8 }, () => glyphs[(Math.random() * glyphs.length) | 0]!),
       })).filter(() => Math.random() > 0.5); // only keep half the columns
 
-      // Minimal security packets (red)
-      packets = Array.from({ length: 5 }, (_, i) => ({
+      // Minimal security packets (emerald + single threat-scan packet)
+      packets = Array.from({ length: 5 }, (_, idx) => ({
         t: Math.random(),
         speed: Math.random() * 0.04 + 0.02,
         lane: Math.floor(Math.random() * 10),
+        alert: idx === 0,
       }));
     };
 
@@ -76,7 +77,7 @@ export function CyberBackground() {
 
       ctx.clearRect(0, 0, w, h);
 
-      // binary rain (muted gold/white)
+      // binary rain (muted moss / subtle emerald)
       ctx.font = "10px ui-monospace, monospace";
       for (const c of columns) {
         c.y += c.speed * dt * 5;
@@ -88,9 +89,9 @@ export function CyberBackground() {
           const y = c.y - idx * 14;
           if (y < -20 || y > h + 20) return;
           const fade = 1 - idx / c.chars.length;
-          // White leading char, trailing muted gold
+          // Subtle emerald leading char, trailing muted moss green
           ctx.fillStyle =
-            idx === 0 ? `rgba(255,255,255,${0.5 * fade})` : `rgba(212,175,55,${0.15 * fade})`;
+            idx === 0 ? `rgba(57,255,136,${0.35 * fade})` : `rgba(109,143,99,${0.18 * fade})`;
           ctx.fillText(ch, c.x, y);
         });
         if (Math.random() < 0.02) {
@@ -99,7 +100,7 @@ export function CyberBackground() {
         }
       }
 
-      // particles + links (dark gold)
+      // particles + links (muted moss green)
       for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
@@ -108,7 +109,7 @@ export function CyberBackground() {
         if (p.y < 0) p.y = h;
         if (p.y > h) p.y = 0;
         ctx.beginPath();
-        ctx.fillStyle = `rgba(212,175,55,${p.a * 0.7})`;
+        ctx.fillStyle = `rgba(109,143,99,${p.a * 0.65})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
@@ -118,7 +119,7 @@ export function CyberBackground() {
           const b = particles[j]!;
           const d = Math.hypot(a.x - b.x, a.y - b.y);
           if (d < 100) {
-            ctx.strokeStyle = `rgba(212,175,55,${0.08 * (1 - d / 100)})`;
+            ctx.strokeStyle = `rgba(109,143,99,${0.09 * (1 - d / 100)})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -127,7 +128,7 @@ export function CyberBackground() {
         }
       }
 
-      // network packets travelling horizontal lanes (muted red)
+      // network packets travelling horizontal lanes (emerald + single red scan trace)
       for (const pk of packets) {
         pk.t += pk.speed * dt;
         if (pk.t > 1.2) {
@@ -137,8 +138,13 @@ export function CyberBackground() {
         const y = (h / 11) * (pk.lane + 1);
         const x = pk.t * w;
         const g = ctx.createLinearGradient(x - 50, y, x, y);
-        g.addColorStop(0, "rgba(193,18,31,0)");
-        g.addColorStop(1, "rgba(193,18,31,0.6)");
+        if (pk.alert) {
+          g.addColorStop(0, "rgba(255,0,0,0)");
+          g.addColorStop(1, "rgba(255,0,0,0.4)");
+        } else {
+          g.addColorStop(0, "rgba(57,255,136,0)");
+          g.addColorStop(1, "rgba(57,255,136,0.45)");
+        }
         ctx.strokeStyle = g;
         ctx.lineWidth = 1.2;
         ctx.beginPath();
@@ -159,18 +165,22 @@ export function CyberBackground() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#030303]">
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background">
       {/* Subtle grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20 [mask-image:linear-gradient(to_bottom,transparent,black,transparent)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-25 [mask-image:linear-gradient(to_bottom,transparent,black,transparent)]" />
 
       {/* Canvas for dynamic elements */}
       <canvas ref={ref} className="h-full w-full opacity-60" aria-hidden="true" />
 
-      {/* HUD Corners */}
-      <div className="absolute top-6 left-6 w-8 h-8 border-t border-l border-primary/20" />
-      <div className="absolute top-6 right-6 w-8 h-8 border-t border-r border-primary/20" />
-      <div className="absolute bottom-6 left-6 w-8 h-8 border-b border-l border-primary/20" />
-      <div className="absolute bottom-6 right-6 w-8 h-8 border-b border-r border-primary/20" />
+      {/* HUD Corners + Fiducial Markers */}
+      <div className="absolute top-6 left-6 w-8 h-8 border-t border-l border-moss/35">
+        <span className="absolute -top-0.5 -left-0.5 h-1.5 w-1.5 bg-alert/80" />
+      </div>
+      <div className="absolute top-6 right-6 w-8 h-8 border-t border-r border-moss/35" />
+      <div className="absolute bottom-6 left-6 w-8 h-8 border-b border-l border-moss/35" />
+      <div className="absolute bottom-6 right-6 w-8 h-8 border-b border-r border-moss/35">
+        <span className="absolute -right-0.5 -bottom-0.5 h-1.5 w-1.5 bg-alert/80" />
+      </div>
 
       {/* Scanlines */}
       <div className="scanlines absolute inset-0 opacity-40" aria-hidden="true" />

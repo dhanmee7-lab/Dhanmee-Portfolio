@@ -20,13 +20,17 @@ export function Credentials() {
         transition={{ duration: 0.6 }}
         className="hud-panel mb-12 p-7"
       >
+        <span
+          className="pointer-events-none absolute top-0 right-0 h-3.5 w-3.5 border-t-2 border-r-2 border-alert/75"
+          aria-hidden="true"
+        />
         <div className="flex items-center gap-3">
-          <Briefcase className="h-5 w-5 text-accent" />
+          <Briefcase className="h-5 w-5 text-primary" />
           <h3 className="text-xl font-bold text-foreground">
             Java Application Development Internship
           </h3>
         </div>
-        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-foreground/75 md:text-base">
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
           Worked on Java programming concepts, backend development, Spring Boot fundamentals,
           object-oriented programming, and practical software development.
         </p>
@@ -46,8 +50,9 @@ export function Credentials() {
                 <BadgeCheck className="h-6 w-6 text-primary" />
                 <h4 className="mt-4 text-base font-bold text-foreground">{c.title}</h4>
                 <p className="mt-2 text-sm text-muted-foreground">{c.detail}</p>
-                <div className="mt-5 h-px w-full bg-primary opacity-20" />
-                <span className="mt-3 block font-mono text-[10px] tracking-[0.3em] text-primary/70">
+                <div className="mt-5 h-px w-full bg-moss/30" />
+                <span className="mt-3 flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-primary">
+                  <span className="h-1.5 w-1.5 rounded-full bg-alert" aria-hidden="true" />
                   CERTIFIED TRACK
                 </span>
               </div>
@@ -64,14 +69,14 @@ export function Credentials() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: i * 0.05 }}
-            className="hud-panel flex items-center gap-4 rounded-md p-4"
+            className="hud-panel flex items-center gap-4 rounded-md p-4 transition-colors hover:border-alert/60"
           >
             {i === 0 ? (
-              <Trophy className="h-5 w-5 shrink-0 text-accent" />
+              <Trophy className="h-5 w-5 shrink-0 text-primary" />
             ) : (
-              <Award className="h-5 w-5 shrink-0 text-primary" />
+              <Award className="h-5 w-5 shrink-0 text-primary/85" />
             )}
-            <p className="text-sm text-foreground/85">{a}</p>
+            <p className="text-sm text-foreground">{a}</p>
           </motion.div>
         ))}
       </div>

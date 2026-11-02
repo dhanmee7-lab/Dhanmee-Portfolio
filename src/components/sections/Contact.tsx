@@ -31,12 +31,17 @@ export function Contact() {
             className="h-full"
           >
             <TiltCard>
-              <div className="hud-panel flex flex-col items-center text-center p-8 h-full transition-colors hover:border-alert group">
-                <span className="flex h-12 w-12 items-center justify-center rounded-md border border-primary/20 bg-[#0D0D0D] text-primary group-hover:text-alert group-hover:border-alert/50 transition-colors mb-6">
+              <div className="hud-panel flex flex-col items-center text-center p-8 h-full transition-colors hover:border-primary/60 group">
+                <span
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
+                  aria-hidden="true"
+                />
+                <span className="flex h-12 w-12 items-center justify-center rounded-md border border-moss/45 bg-background text-primary group-hover:border-primary transition-colors mb-6">
                   <c.icon className="h-5 w-5" />
                 </span>
 
-                <span className="block font-mono text-[10px] tracking-[0.3em] text-muted-foreground mb-3">
+                <span className="mb-3 flex items-center justify-center gap-2 font-mono text-[10px] tracking-[0.3em] text-primary">
+                  <span className="h-1 w-1 rounded-full bg-alert" aria-hidden="true" />
                   {c.label}
                 </span>
 
@@ -45,7 +50,7 @@ export function Contact() {
                     href={c.href}
                     target={c.href.startsWith("http") ? "_blank" : undefined}
                     rel="noreferrer noopener"
-                    className="block text-sm font-bold text-foreground transition-colors group-hover:text-alert"
+                    className="relative inline-block pb-0.5 text-sm font-bold text-foreground transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-alert after:transition-transform after:duration-200 group-hover:text-primary hover:after:scale-x-100"
                   >
                     {c.value}
                   </a>
