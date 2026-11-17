@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ABOUT_PARAGRAPHS } from "@/lib/portfolio-data";
 import { Section, SectionHeading } from "@/components/cyber/Section";
+import { TiltCard } from "@/components/cyber/TiltCard";
 
 export function About() {
   return (
@@ -33,27 +34,44 @@ export function About() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative border border-border bg-card/95 backdrop-blur-sm p-10 rounded-lg shadow-[0_0_30px_rgba(0,0,0,0.85)] w-full max-w-sm"
+            className="w-full max-w-sm"
           >
-            {/* HUD Accents */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-moss/60" />
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-alert/80" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-alert/80" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-moss/60" />
+            <TiltCard
+              intensity={9}
+              glareOpacity={0.12}
+              className="relative border border-border bg-card/95 backdrop-blur-sm p-10 rounded-lg shadow-[0_0_35px_rgba(0,0,0,0.85),0_0_20px_rgba(57,255,136,0.06)] hover:shadow-[0_0_45px_rgba(57,255,136,0.18)] transition-shadow duration-500 w-full [transform-style:preserve-3d]"
+            >
+              {/* HUD Accents */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-moss/60 [transform:translateZ(14px)]" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-alert/80 [transform:translateZ(14px)]" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-alert/80 [transform:translateZ(14px)]" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-moss/60 [transform:translateZ(14px)]" />
 
-            <div className="mb-6 flex items-center justify-center gap-2 font-mono text-[9px] tracking-[0.3em] text-moss">
-              <span className="h-1.5 w-1.5 rounded-full bg-alert" aria-hidden="true" />
-              <span>
-                OPERATOR <span className="text-alert">//</span> DOCTRINE
-              </span>
-            </div>
+              <div className="mb-6 flex items-center justify-center gap-2 font-mono text-[9px] tracking-[0.3em] text-moss [transform:translateZ(18px)]">
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-alert animate-pulse"
+                  aria-hidden="true"
+                />
+                <span>
+                  OPERATOR <span className="text-alert">//</span> DOCTRINE
+                </span>
+              </div>
 
-            <div className="flex flex-col space-y-6 font-mono text-xl tracking-[0.4em] text-center">
-              <span className="text-foreground border-b border-moss/30 pb-4">THINK</span>
-              <span className="text-foreground border-b border-moss/30 pb-4">ANALYZE</span>
-              <span className="text-foreground border-b border-moss/30 pb-4">SECURE</span>
-              <span className="text-primary text-glow font-bold pt-2">REPEAT</span>
-            </div>
+              <div className="flex flex-col space-y-6 font-mono text-xl tracking-[0.4em] text-center [transform-style:preserve-3d]">
+                <span className="text-foreground border-b border-moss/30 pb-4 [transform:translateZ(16px)] transition-transform duration-300 hover:[transform:translateZ(24px)]">
+                  THINK
+                </span>
+                <span className="text-foreground border-b border-moss/30 pb-4 [transform:translateZ(18px)] transition-transform duration-300 hover:[transform:translateZ(26px)]">
+                  ANALYZE
+                </span>
+                <span className="text-foreground border-b border-moss/30 pb-4 [transform:translateZ(20px)] transition-transform duration-300 hover:[transform:translateZ(28px)]">
+                  SECURE
+                </span>
+                <span className="text-primary text-glow font-bold pt-2 [transform:translateZ(26px)] transition-transform duration-300 hover:[transform:translateZ(34px)]">
+                  REPEAT
+                </span>
+              </div>
+            </TiltCard>
           </motion.div>
         </div>
       </div>

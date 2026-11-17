@@ -2,19 +2,20 @@ import { motion } from "motion/react";
 import { Github } from "lucide-react";
 import { PROJECTS } from "@/lib/portfolio-data";
 import { Section, SectionHeading } from "@/components/cyber/Section";
+import { TiltCard } from "@/components/cyber/TiltCard";
 
 function AssetArcPreview() {
   const bars = [62, 38, 84, 51, 73, 29, 95, 44];
   return (
-    <div className="hud-panel h-full min-h-[240px] p-5">
-      <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-[0.25em] text-primary">
+    <div className="hud-panel h-full min-h-[240px] p-5 [transform-style:preserve-3d]">
+      <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-[0.25em] text-primary [transform:translateZ(18px)]">
         <span>ASSET HEALTH</span>
         <span className="flex items-center gap-1.5 text-primary text-glow">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
           LIVE
         </span>
       </div>
-      <div className="flex h-32 items-end gap-2">
+      <div className="flex h-32 items-end gap-2 [transform:translateZ(16px)]">
         {bars.map((b, i) => (
           <motion.span
             key={i}
@@ -28,7 +29,7 @@ function AssetArcPreview() {
           />
         ))}
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-3 font-mono text-xs">
+      <div className="mt-4 grid grid-cols-3 gap-3 font-mono text-xs [transform:translateZ(22px)]">
         {[
           { k: "UPTIME", v: "99.4%", critical: false },
           { k: "TASKS", v: "27", critical: false },
@@ -36,7 +37,7 @@ function AssetArcPreview() {
         ].map(({ k, v, critical }) => (
           <div
             key={k}
-            className={`rounded-md border bg-background/85 p-2 ${
+            className={`rounded-md border bg-background/85 p-2 transition-transform duration-200 hover:-translate-y-0.5 ${
               critical ? "border-alert/45" : "border-moss/35"
             }`}
           >
@@ -67,8 +68,8 @@ function VeriSentinelPreview() {
     { x: 70, y: 65, status: "analyzing" },
   ];
   return (
-    <div className="hud-panel relative h-full min-h-[240px] overflow-hidden p-5 flex flex-col">
-      <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-[0.25em] text-primary">
+    <div className="hud-panel relative h-full min-h-[240px] overflow-hidden p-5 flex flex-col [transform-style:preserve-3d]">
+      <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-[0.25em] text-primary [transform:translateZ(18px)]">
         <span>CREDIBILITY INTELLIGENCE</span>
         <span className="text-primary text-glow flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
@@ -76,7 +77,7 @@ function VeriSentinelPreview() {
         </span>
       </div>
 
-      <div className="flex-1 flex gap-4 mt-2">
+      <div className="flex-1 flex gap-4 mt-2 [transform:translateZ(20px)]">
         {/* Left side: Score and Metrics */}
         <div className="flex flex-col justify-between font-mono w-1/3">
           <div>
@@ -170,13 +171,13 @@ function CivicNeuronPreview() {
     { name: "UTILITIES", value: 92 },
   ];
   return (
-    <div className="hud-panel relative h-full min-h-[240px] overflow-hidden p-5 flex flex-col">
-      <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-[0.25em] text-primary">
+    <div className="hud-panel relative h-full min-h-[240px] overflow-hidden p-5 flex flex-col [transform-style:preserve-3d]">
+      <div className="mb-4 flex items-center justify-between font-mono text-[10px] tracking-[0.25em] text-primary [transform:translateZ(18px)]">
         <span>CIVIC INTELLIGENCE</span>
         <span className="text-primary text-glow">DATA SYNCED</span>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 flex-1 mt-2">
+      <div className="grid grid-cols-2 gap-4 flex-1 mt-2 [transform:translateZ(20px)]">
         {/* Left: Metrics & Categories */}
         <div className="flex flex-col justify-between font-mono">
           <div className="grid grid-cols-2 gap-2 mb-4">
@@ -279,9 +280,9 @@ function AureviaPreview() {
   ];
 
   return (
-    <div className="hud-panel relative flex h-full min-h-[240px] flex-col justify-between overflow-hidden p-5">
+    <div className="hud-panel relative flex h-full min-h-[240px] flex-col justify-between overflow-hidden p-5 [transform-style:preserve-3d]">
       {/* Header */}
-      <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] tracking-[0.22em]">
+      <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] tracking-[0.22em] [transform:translateZ(18px)]">
         <span className="text-primary">LIBRARY OPS DASHBOARD</span>
         <span className="flex items-center gap-1.5 text-[9px] text-primary text-glow">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
@@ -290,7 +291,7 @@ function AureviaPreview() {
       </div>
 
       {/* 4 Illustrative KPI Cards */}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 font-mono">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 font-mono [transform:translateZ(22px)]">
         {kpis.map((item) => (
           <div
             key={item.label}
@@ -419,65 +420,71 @@ export function Projects() {
             transition={{ duration: 0.7 }}
             className={`grid items-stretch gap-8 lg:grid-cols-2 ${i % 2 ? "lg:[&>*:first-child]:order-2" : ""}`}
           >
-            <div className="hud-panel p-7">
-              <span
-                className="pointer-events-none absolute top-0 right-0 h-3.5 w-3.5 border-t-2 border-r-2 border-alert/75"
-                aria-hidden="true"
-              />
-              <div className="flex items-baseline gap-4">
-                <span className="font-display text-4xl font-black text-primary/85 text-glow">
-                  {p.id}
-                </span>
+            <TiltCard className="h-full">
+              <div className="hud-panel flex h-full flex-col justify-between p-7">
+                <span
+                  className="pointer-events-none absolute top-0 right-0 h-3.5 w-3.5 border-t-2 border-r-2 border-alert/75"
+                  aria-hidden="true"
+                />
                 <div>
-                  <h3 className="text-2xl font-black tracking-wide text-foreground">
-                    {p.projectName}
-                  </h3>
-                  <p className="mt-1 flex items-center gap-2 font-mono text-xs tracking-[0.2em] text-primary">
-                    <span className="h-3 w-[2px] shrink-0 bg-alert" aria-hidden="true" />
-                    {p.subtitle.toUpperCase()}
+                  <div className="flex items-baseline gap-4 [transform:translateZ(26px)]">
+                    <span className="font-display text-4xl font-black text-primary/85 text-glow">
+                      {p.id}
+                    </span>
+                    <div>
+                      <h3 className="text-2xl font-black tracking-wide text-foreground">
+                        {p.projectName}
+                      </h3>
+                      <p className="mt-1 flex items-center gap-2 font-mono text-xs tracking-[0.2em] text-primary">
+                        <span className="h-3 w-[2px] shrink-0 bg-alert" aria-hidden="true" />
+                        {p.subtitle.toUpperCase()}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base [transform:translateZ(12px)]">
+                    {p.description}
                   </p>
+                  <ul className="mt-6 flex flex-wrap gap-2 [transform:translateZ(16px)]">
+                    {p.technologies.map((tech) => (
+                      <li
+                        key={tech}
+                        className="rounded-sm border border-moss/45 bg-background px-3 py-1.5 font-mono text-[11px] text-primary transition-all duration-200 hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_12px_rgba(57,255,136,0.3)]"
+                      >
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-8 flex flex-wrap items-center gap-5 [transform:translateZ(24px)]">
+                  <a
+                    href={p.liveDemoUrl}
+                    target={p.liveDemoUrl.startsWith("http") ? "_blank" : undefined}
+                    rel={p.liveDemoUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="relative flex items-center gap-2 pb-0.5 font-mono text-[10px] tracking-[0.2em] text-primary transition-opacity after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-alert after:transition-transform after:duration-200 hover:opacity-90 hover:after:scale-x-100"
+                  >
+                    VIEW PROJECT <span className="text-alert">→</span>
+                  </a>
+                  <a
+                    href={p.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 rounded-sm border border-moss/50 bg-background px-3.5 py-2 font-mono text-[10px] tracking-[0.2em] text-primary transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_18px_-4px_rgba(57,255,136,0.5)] active:translate-y-0"
+                  >
+                    <Github
+                      className="h-3.5 w-3.5 text-primary transition-colors"
+                      aria-hidden="true"
+                    />
+                    <span>VIEW SOURCE CODE</span>
+                  </a>
                 </div>
               </div>
-              <p className="mt-5 text-sm leading-relaxed text-muted-foreground md:text-base">
-                {p.description}
-              </p>
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {p.technologies.map((tech) => (
-                  <li
-                    key={tech}
-                    className="rounded-sm border border-moss/45 bg-background px-3 py-1.5 font-mono text-[11px] text-primary transition-colors hover:border-primary hover:bg-primary/10"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8 flex flex-wrap items-center gap-5">
-                <a
-                  href={p.liveDemoUrl}
-                  target={p.liveDemoUrl.startsWith("http") ? "_blank" : undefined}
-                  rel={p.liveDemoUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="relative flex items-center gap-2 pb-0.5 font-mono text-[10px] tracking-[0.2em] text-primary transition-opacity after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-alert after:transition-transform after:duration-200 hover:opacity-90 hover:after:scale-x-100"
-                >
-                  VIEW PROJECT <span className="text-alert">→</span>
-                </a>
-                <a
-                  href={p.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-sm border border-moss/50 bg-background px-3.5 py-2 font-mono text-[10px] tracking-[0.2em] text-primary transition-all duration-200 hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_16px_-6px_rgba(57,255,136,0.4)]"
-                >
-                  <Github
-                    className="h-3.5 w-3.5 text-primary transition-colors"
-                    aria-hidden="true"
-                  />
-                  <span>VIEW SOURCE CODE</span>
-                </a>
-              </div>
-            </div>
-            {p.id === "01" && <AssetArcPreview />}
-            {p.id === "02" && <VeriSentinelPreview />}
-            {p.id === "03" && <CivicNeuronPreview />}
-            {p.id === "04" && <AureviaPreview />}
+            </TiltCard>
+            <TiltCard className="h-full">
+              {p.id === "01" && <AssetArcPreview />}
+              {p.id === "02" && <VeriSentinelPreview />}
+              {p.id === "03" && <CivicNeuronPreview />}
+              {p.id === "04" && <AureviaPreview />}
+            </TiltCard>
           </motion.article>
         ))}
       </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 import { STATS } from "@/lib/portfolio-data";
 import { Section } from "@/components/cyber/Section";
+import { TiltCard } from "@/components/cyber/TiltCard";
 
 function Counter({ target }: { target: number }) {
   const ref = useRef<HTMLSpanElement | null>(null);
@@ -36,25 +37,33 @@ export function Stats() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: i * 0.08 }}
-            className="hud-panel p-7 text-center"
+            className="h-full"
           >
-            <span
-              className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
-              aria-hidden="true"
-            />
-            <div className="font-display text-4xl font-black text-primary text-glow sm:text-5xl">
-              {s.value === null ? (
-                s.suffix
-              ) : (
-                <>
-                  <Counter target={s.value} />
-                  {s.suffix}
-                </>
-              )}
-            </div>
-            <p className="mt-3 font-mono text-[11px] tracking-[0.28em] text-primary/85 uppercase">
-              {s.label}
-            </p>
+            <TiltCard
+              intensity={9}
+              glareOpacity={0.12}
+              className="h-full [transform-style:preserve-3d]"
+            >
+              <div className="hud-panel p-7 text-center h-full flex flex-col justify-center [transform-style:preserve-3d]">
+                <span
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75 [transform:translateZ(12px)]"
+                  aria-hidden="true"
+                />
+                <div className="font-display text-4xl font-black text-primary text-glow sm:text-5xl [transform:translateZ(26px)] transition-transform duration-300">
+                  {s.value === null ? (
+                    s.suffix
+                  ) : (
+                    <>
+                      <Counter target={s.value} />
+                      {s.suffix}
+                    </>
+                  )}
+                </div>
+                <p className="mt-3 font-mono text-[11px] tracking-[0.28em] text-primary/85 uppercase [transform:translateZ(16px)]">
+                  {s.label}
+                </p>
+              </div>
+            </TiltCard>
           </motion.div>
         ))}
       </div>

@@ -1,54 +1,108 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
-/** 3D tilt wrapper with neon border highlight following the pointer. */
-export function TiltCard({
-  children,
-  className = "",
-  intensity = 8,
-}: {
+interface TiltCardProps {
   children: ReactNode;
   className?: string;
   intensity?: number;
-}) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [style, setStyle] = useState<{ transform: string }>({
-    transform: "perspective(900px) rotateX(0deg) rotateY(0deg)",
-  });
-  const [spot, setSpot] = useState({ x: 50, y: 50, on: false });
+  glareOpacity?: number;
+}
 
-  const handleMove = (e: React.MouseEvent) => {
-    const el = ref.current;
+/**
+ * Premium 3D Perspective Tilt Card
+ * - Interactive multi-axis 3D rotation with smooth dampening
+ * - Specular holographic emerald cursor-tracking glare
+ * - Preserve-3D transform layer for nested floating dimensional elements
+ * - Automatic touch / coarse pointer detection to avoid scroll interference
+ * - Smooth cinematic return to rest position
+ */
+export function TiltCard({
+  children,
+  className = "",
+  intensity = 10,
+  glareOpacity = 0.12,
+}: TiltCardProps) {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [transform, setTransform] = useState(
+    "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)",
+  );
+  const [glarePos, setGlarePos] = useState({ x: 50, y: 50, active: false });
+  const [isCoarse, setIsCoarse] = useState(false);
+
+  useEffect(() => {
+    // Detect touch / coarse pointers to keep mobile scrolling buttery smooth
+    if (typeof window !== "undefined") {
+      setIsCoarse(window.matchMedia("(pointer: coarse)").matches);
+    }
+  }, []);
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isCoarse) return;
+    const el = cardRef.current;
     if (!el) return;
+
     const rect = el.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    setStyle({
-      transform: `perspective(900px) rotateX(${(0.5 - py) * intensity}deg) rotateY(${(px - 0.5) * intensity}deg) translateY(-4px)`,
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const normX = (x / rect.width) * 2 - 1; // -1 to 1
+    const normY = (y / rect.height) * 2 - 1; // -1 to 1
+
+    const rotX = -normY * intensity;
+    const rotY = normX * intensity;
+
+    setTransform(
+      `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(8px) translateY(-4px)`,
+    );
+    setGlarePos({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      active: true,
     });
-    setSpot({ x: px * 100, y: py * 100, on: true });
   };
 
-  const reset = () => {
-    setStyle({ transform: "perspective(900px) rotateX(0deg) rotateY(0deg)" });
-    setSpot((s) => ({ ...s, on: false }));
+  const handlePointerLeave = () => {
+    if (isCoarse) return;
+    setTransform("perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) translateY(0px)");
+    setGlarePos((prev) => ({ ...prev, active: false }));
   };
 
   return (
     <div
-      ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={reset}
-      style={style}
-      className={`group relative transition-transform duration-200 ease-out will-change-transform ${className}`}
+      ref={cardRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      style={{
+        transform,
+        transformStyle: "preserve-3d",
+      }}
+      className={`group relative transition-transform duration-300 ease-out will-change-transform ${className}`}
     >
+      {/* Dynamic Specular Emerald Glare overlay */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 z-30 rounded-lg transition-opacity duration-300"
         style={{
-          background: `radial-gradient(320px circle at ${spot.x}% ${spot.y}%, rgba(57,255,136,0.08), transparent 70%)`,
+          opacity: glarePos.active ? 1 : 0,
+          background: `radial-gradient(circle 320px at ${glarePos.x}% ${glarePos.y}%, rgba(57, 255, 136, ${glareOpacity}), transparent 75%)`,
         }}
         aria-hidden="true"
       />
-      {children}
+
+      {/* Subtle border sheen illumination */}
+      <div
+        className="pointer-events-none absolute -inset-[1px] z-20 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(circle 260px at ${glarePos.x}% ${glarePos.y}%, rgba(57, 255, 136, 0.4), transparent 70%)`,
+          mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          padding: "1px",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Card Content with 3D child preservation */}
+      <div className="relative h-full w-full [transform-style:preserve-3d]">{children}</div>
     </div>
   );
 }

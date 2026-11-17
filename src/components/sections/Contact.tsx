@@ -30,17 +30,21 @@ export function Contact() {
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="h-full"
           >
-            <TiltCard>
-              <div className="hud-panel flex flex-col items-center text-center p-8 h-full transition-colors hover:border-primary/60 group">
+            <TiltCard
+              intensity={8}
+              glareOpacity={0.12}
+              className="h-full [transform-style:preserve-3d]"
+            >
+              <div className="hud-panel flex flex-col items-center text-center p-8 h-full transition-colors hover:border-primary/60 group [transform-style:preserve-3d]">
                 <span
-                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75 [transform:translateZ(12px)]"
                   aria-hidden="true"
                 />
-                <span className="flex h-12 w-12 items-center justify-center rounded-md border border-moss/45 bg-background text-primary group-hover:border-primary transition-colors mb-6">
+                <span className="flex h-12 w-12 items-center justify-center rounded-md border border-moss/45 bg-background text-primary group-hover:border-primary transition-colors mb-6 [transform:translateZ(20px)] shadow-[0_0_15px_rgba(57,255,136,0.1)]">
                   <c.icon className="h-5 w-5" />
                 </span>
 
-                <span className="mb-3 flex items-center justify-center gap-2 font-mono text-[10px] tracking-[0.3em] text-primary">
+                <span className="mb-3 flex items-center justify-center gap-2 font-mono text-[10px] tracking-[0.3em] text-primary [transform:translateZ(16px)]">
                   <span className="h-1 w-1 rounded-full bg-alert" aria-hidden="true" />
                   {c.label}
                 </span>
@@ -50,12 +54,14 @@ export function Contact() {
                     href={c.href}
                     target={c.href.startsWith("http") ? "_blank" : undefined}
                     rel="noreferrer noopener"
-                    className="relative inline-block pb-0.5 text-sm font-bold text-foreground transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-alert after:transition-transform after:duration-200 group-hover:text-primary hover:after:scale-x-100"
+                    className="relative inline-block pb-0.5 text-sm font-bold text-foreground transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-alert after:transition-transform after:duration-200 group-hover:text-primary hover:after:scale-x-100 [transform:translateZ(18px)]"
                   >
                     {c.value}
                   </a>
                 ) : (
-                  <span className="block text-sm font-bold text-foreground">{c.value}</span>
+                  <span className="block text-sm font-bold text-foreground [transform:translateZ(18px)]">
+                    {c.value}
+                  </span>
                 )}
               </div>
             </TiltCard>

@@ -1,13 +1,14 @@
 import { motion } from "motion/react";
 import { Download, ChevronRight, Mouse } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Hero3DObject } from "@/components/cyber/Hero3DObject";
 
 export function Hero() {
   return (
     <section id="hero" className="relative flex min-h-screen w-full items-center overflow-hidden">
-      <div className="relative mx-auto grid w-full max-w-7xl lg:grid-cols-12 gap-12 px-5 pt-32 pb-24 sm:px-8 z-10">
+      <div className="relative mx-auto grid w-full max-w-7xl lg:grid-cols-12 gap-10 px-5 pt-28 pb-16 lg:pt-32 lg:pb-20 sm:px-8 z-10">
         {/* LEFT COLUMN */}
-        <div className="lg:col-span-7 flex flex-col justify-center space-y-10 z-20">
+        <div className="lg:col-span-7 flex flex-col justify-center space-y-8 z-20">
           {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -24,7 +25,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.1 }}
-            className="text-[clamp(1.65rem,7.2vw,3.6rem)] leading-[0.95] font-black uppercase lg:text-6xl xl:text-[5.25rem] tracking-tight flex flex-col"
+            className="text-[clamp(1.65rem,5.5vw,3.25rem)] leading-[0.95] font-black uppercase lg:text-5xl xl:text-6xl tracking-tight flex flex-col"
           >
             <span className="text-primary text-glow pb-2">DHANMEESWARAN</span>
             <span className="text-foreground">G</span>
@@ -102,34 +103,9 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="lg:col-span-5 relative flex flex-col justify-center min-h-[400px] lg:min-h-full z-10 mt-8 lg:mt-0">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative border border-border bg-card/95 backdrop-blur-sm p-8 rounded-lg shadow-[0_0_30px_rgba(0,0,0,0.85)]"
-          >
-            {/* HUD Accents */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-moss/60" />
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-alert/80" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-alert/80" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-moss/60" />
-
-            <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-primary uppercase mb-8">
-              <div className="h-4 w-[2px] bg-primary" />
-              <span>
-                FOCUS AREAS <span className="text-alert">//</span> 2026
-              </span>
-            </div>
-
-            <div className="flex flex-col space-y-6 font-mono text-sm sm:text-base tracking-widest text-right">
-              <span className="text-foreground border-b border-border pb-2">SECURITY</span>
-              <span className="text-foreground border-b border-border pb-2">INNOVATION</span>
-              <span className="text-foreground border-b border-border pb-2">RESILIENCE</span>
-              <span className="text-primary text-glow font-bold pt-2">A BETTER TOMORROW</span>
-            </div>
-          </motion.div>
+        {/* RIGHT COLUMN — 3D Holographic Cyber Core */}
+        <div className="lg:col-span-5 relative flex flex-col justify-center min-h-[440px] z-10 mt-8 lg:mt-0">
+          <Hero3DObject />
         </div>
       </div>
 

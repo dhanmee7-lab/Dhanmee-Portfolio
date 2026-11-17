@@ -12,11 +12,12 @@ export function SectionHeading({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 28, rotateX: 6 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6 }}
-      className="mb-12"
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      style={{ perspective: "1000px" }}
+      className="mb-12 will-change-transform"
     >
       <div className="flex items-center gap-3 font-mono text-xs tracking-[0.35em] text-primary">
         <span className="h-1.5 w-1.5 shrink-0 bg-alert" aria-hidden="true" />

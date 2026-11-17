@@ -27,14 +27,14 @@ export function Skills() {
                   className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
                   aria-hidden="true"
                 />
-                <div className="mb-5 flex items-center justify-between">
+                <div className="mb-5 flex items-center justify-between [transform:translateZ(20px)]">
                   <h3 className="text-lg font-bold tracking-wide text-foreground">{group.title}</h3>
                   <span className="flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-primary">
                     <span className="h-1 w-1 rounded-full bg-alert" aria-hidden="true" />
                     {group.code}
                   </span>
                 </div>
-                <ul className="flex flex-wrap gap-2">
+                <ul className="flex flex-wrap gap-2 [transform:translateZ(14px)]">
                   {group.items.map((item, i) => (
                     <motion.li
                       key={item}
