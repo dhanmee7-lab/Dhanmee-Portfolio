@@ -25,10 +25,10 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.1 }}
-            className="text-[clamp(1.65rem,5.5vw,3.25rem)] leading-[0.95] font-black uppercase lg:text-5xl xl:text-6xl tracking-tight flex flex-col"
+            className="text-[clamp(1.75rem,4.5vw,3.65rem)] font-black uppercase tracking-tight flex flex-wrap items-baseline gap-x-3 sm:gap-x-4 leading-tight"
           >
-            <span className="text-primary text-glow pb-2">DHANMEESWARAN</span>
-            <span className="text-foreground">G</span>
+            <span className="text-primary text-glow">DHANMEESWARAN</span>
+            <span className="text-foreground tracking-normal font-black">G</span>
           </motion.h1>
 
           {/* Subheading & Description */}
