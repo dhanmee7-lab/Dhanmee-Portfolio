@@ -41,11 +41,11 @@ export function About() {
               glareOpacity={0.12}
               className="relative border border-border bg-card/95 backdrop-blur-sm p-10 rounded-lg shadow-[0_0_35px_rgba(0,0,0,0.85),0_0_20px_rgba(57,255,136,0.06)] hover:shadow-[0_0_45px_rgba(57,255,136,0.18)] transition-shadow duration-500 w-full [transform-style:preserve-3d]"
             >
-              {/* HUD Accents */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-moss/60 [transform:translateZ(14px)]" />
-              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-alert/80 [transform:translateZ(14px)]" />
-              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-alert/80 [transform:translateZ(14px)]" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-moss/60 [transform:translateZ(14px)]" />
+              {/* Refined Engineering Corner Accents */}
+              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-moss/50 [transform:translateZ(14px)]" />
+              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-moss/50 [transform:translateZ(14px)]" />
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-moss/50 [transform:translateZ(14px)]" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-moss/50 [transform:translateZ(14px)]" />
 
               <div className="mb-6 flex items-center justify-center gap-2 font-mono text-[9px] tracking-[0.3em] text-moss [transform:translateZ(18px)]">
                 <span

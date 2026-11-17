@@ -49,43 +49,38 @@
 :root {
   --radius: 0.375rem;
   --background: #000000;
-  --foreground: #FFFFFF;
-  --card: #080B09;
-  --card-foreground: #FFFFFF;
-  --popover: #080B09;
-  --popover-foreground: #FFFFFF;
-  --primary: #39FF88;
+  --foreground: #ffffff;
+  --card: #080b09;
+  --card-foreground: #ffffff;
+  --popover: #080b09;
+  --popover-foreground: #ffffff;
+  --primary: #39ff88;
   --primary-foreground: #000000;
-  --secondary: #080B09;
-  --secondary-foreground: #FFFFFF;
-  --muted: #080B09;
-  --muted-foreground: #A0A0A0;
-  --accent: #6D8F63;
-  --accent-foreground: #FFFFFF;
-  --destructive: #FF0000;
-  --destructive-foreground: #FFFFFF;
-  --border: #263A2B;
-  --input: #263A2B;
-  --ring: #39FF88;
+  --secondary: #080b09;
+  --secondary-foreground: #ffffff;
+  --muted: #080b09;
+  --muted-foreground: #a0a0a0;
+  --accent: #6d8f63;
+  --accent-foreground: #ffffff;
+  --destructive: #ff0000;
+  --destructive-foreground: #ffffff;
+  --border: #263a2b;
+  --input: #263a2b;
+  --ring: #39ff88;
 
-  --moss: #6D8F63;
-  --emerald: #39FF88;
-  --cyber: #6D8F63;
-  --cyber-glow: #39FF88;
-  --signal: #6D8F63;
-  --alert: #FF0000;
-  --grid: #263A2B66;
+  --moss: #6d8f63;
+  --emerald: #39ff88;
+  --cyber: #6d8f63;
+  --cyber-glow: #39ff88;
+  --signal: #6d8f63;
+  --alert: #ff0000;
+  --grid: #263a2b66;
 
   --gradient-cyber: linear-gradient(120deg, var(--moss), var(--emerald));
-  --gradient-shell: radial-gradient(
-    ellipse at 50% -10%,
-    #39FF880f,
-    transparent 65%
-  );
-  --shadow-neon: 0 0 0 1px #263A2B, 0 0 24px -10px #39FF882e;
-  --shadow-neon-strong:
-    0 0 0 1px #39FF8880, 0 0 32px -8px #39FF8859;
-  --shadow-signal: 0 0 0 1px #6D8F6366, 0 0 24px -8px #6D8F634d;
+  --gradient-shell: radial-gradient(ellipse at 50% -10%, #39ff880f, transparent 65%);
+  --shadow-neon: 0 0 0 1px #263a2b, 0 0 24px -10px #39ff882e;
+  --shadow-neon-strong: 0 0 0 1px #39ff8880, 0 0 32px -8px #39ff8859;
+  --shadow-signal: 0 0 0 1px #6d8f6366, 0 0 24px -8px #6d8f634d;
 }
 
 .dark {
@@ -118,7 +113,7 @@
 
   ::selection {
     background: rgba(57, 255, 136, 0.22);
-    color: #FFFFFF;
+    color: #ffffff;
   }
 
   ::-webkit-scrollbar {
@@ -145,7 +140,14 @@
   backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-neon);
-  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  clip-path: polygon(
+    14px 0,
+    100% 0,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%,
+    0 14px
+  );
 }
 
 @utility text-gradient-cyber {

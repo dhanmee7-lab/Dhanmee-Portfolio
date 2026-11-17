@@ -30,7 +30,7 @@ export function Education() {
               <TiltCard intensity={6} glareOpacity={0.08} className="[transform-style:preserve-3d]">
                 <div className="hud-panel p-6 [transform-style:preserve-3d]">
                   <span
-                    className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75 [transform:translateZ(12px)]"
+                    className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-moss/45 [transform:translateZ(12px)]"
                     aria-hidden="true"
                   />
                   <span className="inline-flex items-center gap-2 font-mono text-xs font-semibold tracking-[0.3em] text-primary [transform:translateZ(16px)]">

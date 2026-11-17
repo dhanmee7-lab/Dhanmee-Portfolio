@@ -46,7 +46,7 @@ export function Stats() {
             >
               <div className="hud-panel p-7 text-center h-full flex flex-col justify-center [transform-style:preserve-3d]">
                 <span
-                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75 [transform:translateZ(12px)]"
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-moss/45 [transform:translateZ(12px)]"
                   aria-hidden="true"
                 />
                 <div className="font-display text-4xl font-black text-primary text-glow sm:text-5xl [transform:translateZ(26px)] transition-transform duration-300">

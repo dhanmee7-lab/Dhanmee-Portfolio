@@ -423,7 +423,7 @@ export function Projects() {
             <TiltCard className="h-full">
               <div className="hud-panel flex h-full flex-col justify-between p-7">
                 <span
-                  className="pointer-events-none absolute top-0 right-0 h-3.5 w-3.5 border-t-2 border-r-2 border-alert/75"
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-moss/45"
                   aria-hidden="true"
                 />
                 <div>

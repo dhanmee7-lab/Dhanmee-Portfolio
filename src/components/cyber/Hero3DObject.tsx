@@ -1,426 +1,356 @@
 import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
 /**
- * Floating Dark Chrome & Black Titanium Geometric Sculpture
- * - Solid faceted titanium & chrome polyhedron with real physical lighting
- * - Diffuse studio illumination, specular chrome highlights & emerald rim lighting
- * - Three dimensional dark chrome & titanium orbital gimbal rings with metallic bevels
- * - Inner pulsing emerald reactor node shining through geometric facets
- * - Soft dimensional drop shadow giving grounded physical weight
- * - Smooth pointer-driven pitch/yaw rotation with luxury inertia damping
- * - DPR-aware, motion-safe, responsive HTML5 Canvas 3D rendering
+ * Premium Floating Black-Chrome and Brushed-Titanium 3D Sculpture
+ * - Sophisticated faceted dodecahedral titanium centerpiece with studio specular luster
+ * - Physically based materials (metalness 0.90, roughness 0.22, flat-faceted shading)
+ * - Studio environment map providing authentic chrome reflections and emerald rim highlights
+ * - Inner glowing emerald reactor core pulsing with gentle respiratory frequency
+ * - Two proportionate, solid metallic orbital rings angled in 3D space with independent kinetic rotation
+ * - Precision satellite beacon nodes tracing orbits
+ * - Grounded floor contact shadow
+ * - Pointer-driven inertia tilt and smooth natural animation
+ * - Full operator priorities panel with completely rendered labels (never truncated)
  */
 export function Hero3DObject() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const canvasContainerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [hovered, setHovered] = useState(false);
-
-  // Inertial mouse tracking
-  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      return;
+    }
 
-    let rafId = 0;
-    let width = 0;
-    let height = 0;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
 
-    // 3D Point & Face Math
-    type Point3D = { x: number; y: number; z: number };
-    type ProjectedPoint = { x: number; y: number; z: number; scale: number };
+    // 1. Scene & Camera
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+    camera.position.set(0, 0, 5.3);
 
-    // Rhombic Dodecahedral Titanium Core Vertices
-    // 6 axial vertices + 8 cubic vertices = 14 vertices, 24 triangular facets
-    const rOuter = 1.0;
-    const rInner = 0.62;
+    // 2. Studio Lighting & Procedural Environment Reflection Map
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
 
-    const axialVertices: Point3D[] = [
-      { x: rOuter, y: 0, z: 0 }, // 0: +X
-      { x: -rOuter, y: 0, z: 0 }, // 1: -X
-      { x: 0, y: rOuter, z: 0 }, // 2: +Y
-      { x: 0, y: -rOuter, z: 0 }, // 3: -Y
-      { x: 0, y: 0, z: rOuter }, // 4: +Z
-      { x: 0, y: 0, z: -rOuter }, // 5: -Z
+    const envCanvas = document.createElement("canvas");
+    envCanvas.width = 512;
+    envCanvas.height = 256;
+    const envCtx = envCanvas.getContext("2d");
+    if (envCtx) {
+      envCtx.fillStyle = "#020503";
+      envCtx.fillRect(0, 0, 512, 256);
+
+      // Studio key softbox (white-emerald specular source)
+      const keyGrad = envCtx.createRadialGradient(140, 60, 0, 140, 60, 100);
+      keyGrad.addColorStop(0, "#ffffff");
+      keyGrad.addColorStop(0.35, "#e8ffef");
+      keyGrad.addColorStop(0.75, "#254a33");
+      keyGrad.addColorStop(1, "transparent");
+      envCtx.fillStyle = keyGrad;
+      envCtx.fillRect(40, 0, 200, 160);
+
+      // Neon emerald rim light strip
+      const rimGrad = envCtx.createRadialGradient(380, 120, 0, 380, 120, 90);
+      rimGrad.addColorStop(0, "#39ff88");
+      rimGrad.addColorStop(0.4, "#1d723f");
+      rimGrad.addColorStop(1, "transparent");
+      envCtx.fillStyle = rimGrad;
+      envCtx.fillRect(290, 30, 180, 180);
+
+      // Moss fill reflection
+      const fillGrad = envCtx.createRadialGradient(256, 210, 0, 256, 210, 80);
+      fillGrad.addColorStop(0, "#6d8f63");
+      fillGrad.addColorStop(1, "transparent");
+      envCtx.fillStyle = fillGrad;
+      envCtx.fillRect(176, 130, 160, 120);
+    }
+
+    const envTexture = new THREE.CanvasTexture(envCanvas);
+    const envMap = pmremGenerator.fromEquirectangular(envTexture).texture;
+    scene.environment = envMap;
+    envTexture.dispose();
+    pmremGenerator.dispose();
+
+    // Direct Studio Lights
+    const ambientLight = new THREE.AmbientLight(0x0c1810, 0.85);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 3.4);
+    keyLight.position.set(-3.5, 4.5, 4.2);
+    scene.add(keyLight);
+
+    const emeraldRimLight = new THREE.DirectionalLight(0x39ff88, 3.8);
+    emeraldRimLight.position.set(3.8, -2.2, -2.5);
+    scene.add(emeraldRimLight);
+
+    const fillLight = new THREE.PointLight(0x6d8f63, 1.8, 12);
+    fillLight.position.set(0, 3, 2);
+    scene.add(fillLight);
+
+    // 3. Materials
+    const darkTitaniumMat = new THREE.MeshStandardMaterial({
+      color: 0x1f2e26,
+      metalness: 0.92,
+      roughness: 0.22,
+      flatShading: true,
+      emissive: 0x051a0e,
+      emissiveIntensity: 0.2,
+      envMapIntensity: 1.4,
+    });
+
+    const titaniumRingMat1 = new THREE.MeshStandardMaterial({
+      color: 0x24362b,
+      metalness: 0.95,
+      roughness: 0.16,
+      emissive: 0x082414,
+      emissiveIntensity: 0.25,
+      envMapIntensity: 1.6,
+    });
+
+    const titaniumRingMat2 = new THREE.MeshStandardMaterial({
+      color: 0x1c2a22,
+      metalness: 0.95,
+      roughness: 0.18,
+      emissive: 0x051c0f,
+      emissiveIntensity: 0.2,
+      envMapIntensity: 1.5,
+    });
+
+    const innerCoreMat = new THREE.MeshStandardMaterial({
+      color: 0x39ff88,
+      emissive: 0x39ff88,
+      emissiveIntensity: 0.85,
+      roughness: 0.2,
+      metalness: 0.5,
+      flatShading: true,
+    });
+
+    const beaconMat = new THREE.MeshBasicMaterial({
+      color: 0x39ff88,
+    });
+
+    // Tracking for cleanup
+    const disposables: { dispose: () => void }[] = [
+      envMap,
+      darkTitaniumMat,
+      titaniumRingMat1,
+      titaniumRingMat2,
+      innerCoreMat,
+      beaconMat,
     ];
 
-    const cubicVertices: Point3D[] = [
-      { x: rInner, y: rInner, z: rInner }, // 6: +++
-      { x: -rInner, y: rInner, z: rInner }, // 7: -++
-      { x: rInner, y: -rInner, z: rInner }, // 8: +-+
-      { x: -rInner, y: -rInner, z: rInner }, // 9: --+
-      { x: rInner, y: rInner, z: -rInner }, // 10: ++-
-      { x: -rInner, y: rInner, z: -rInner }, // 11: -+-
-      { x: rInner, y: -rInner, z: -rInner }, // 12: +--
-      { x: -rInner, y: -rInner, z: -rInner }, // 13: ---
-    ];
+    // Root interactive group
+    const rootGroup = new THREE.Group();
+    scene.add(rootGroup);
 
-    const allVertices: Point3D[] = [...axialVertices, ...cubicVertices];
+    // Sculpture Centerpiece Group
+    const sculptureGroup = new THREE.Group();
+    rootGroup.add(sculptureGroup);
 
-    // 24 Triangular Facets (connecting axial vertices to adjacent cubic vertices)
-    const rawFaces: [number, number, number][] = [
-      // +Z pyramid faces (connected to axial 4: +Z)
-      [4, 6, 7],
-      [4, 7, 9],
-      [4, 9, 8],
-      [4, 8, 6],
-      // -Z pyramid faces (connected to axial 5: -Z)
-      [5, 11, 10],
-      [5, 10, 12],
-      [5, 12, 13],
-      [5, 13, 11],
-      // +Y pyramid faces (connected to axial 2: +Y)
-      [2, 10, 6],
-      [2, 6, 7],
-      [2, 7, 11],
-      [2, 11, 10],
-      // -Y pyramid faces (connected to axial 3: -Y)
-      [3, 8, 12],
-      [3, 12, 13],
-      [3, 13, 9],
-      [3, 9, 8],
-      // +X pyramid faces (connected to axial 0: +X)
-      [0, 6, 10],
-      [0, 10, 12],
-      [0, 12, 8],
-      [0, 8, 6],
-      // -X pyramid faces (connected to axial 1: -X)
-      [1, 11, 7],
-      [1, 7, 9],
-      [1, 9, 13],
-      [1, 13, 11],
-    ];
+    // Outer Faceted Titanium Centerpiece (Faceted Dodecahedron)
+    const outerGeom = new THREE.DodecahedronGeometry(1.0, 0);
+    disposables.push(outerGeom);
+    const outerMesh = new THREE.Mesh(outerGeom, darkTitaniumMat);
+    sculptureGroup.add(outerMesh);
 
-    // Resize handler with zero height feedback loop
+    // Refined subtle edge wire highlight (emerald reflection on chamfers)
+    const wireGeom = new THREE.WireframeGeometry(outerGeom);
+    disposables.push(wireGeom);
+    const wireMat = new THREE.LineBasicMaterial({
+      color: 0x39ff88,
+      transparent: true,
+      opacity: 0.18,
+    });
+    disposables.push(wireMat);
+    const wireMesh = new THREE.LineSegments(wireGeom, wireMat);
+    outerMesh.add(wireMesh);
+
+    // Inner Glowing Emerald Reactor Core
+    const innerGeom = new THREE.OctahedronGeometry(0.5, 0);
+    disposables.push(innerGeom);
+    const innerMesh = new THREE.Mesh(innerGeom, innerCoreMat);
+    sculptureGroup.add(innerMesh);
+
+    // 4. Two Proportionate, Solid Metallic Orbital Rings
+    // Inner Ring: Radius 1.48, Tube 0.032
+    const innerRingGeom = new THREE.TorusGeometry(1.48, 0.032, 16, 96);
+    disposables.push(innerRingGeom);
+
+    const innerRingGroup = new THREE.Group();
+    innerRingGroup.rotation.set(Math.PI / 4, Math.PI / 10, 0);
+    rootGroup.add(innerRingGroup);
+
+    const innerRingMesh = new THREE.Mesh(innerRingGeom, titaniumRingMat1);
+    innerRingGroup.add(innerRingMesh);
+
+    // Satellite node on inner ring
+    const innerBeadGeom = new THREE.SphereGeometry(0.045, 12, 12);
+    disposables.push(innerBeadGeom);
+    const innerBead = new THREE.Mesh(innerBeadGeom, beaconMat);
+    innerBead.position.set(1.48, 0, 0);
+    innerRingGroup.add(innerBead);
+
+    // Outer Ring: Radius 1.85, Tube 0.026
+    const outerRingGeom = new THREE.TorusGeometry(1.85, 0.026, 16, 96);
+    disposables.push(outerRingGeom);
+
+    const outerRingGroup = new THREE.Group();
+    outerRingGroup.rotation.set(-Math.PI / 3.2, 0, Math.PI / 5);
+    rootGroup.add(outerRingGroup);
+
+    const outerRingMesh = new THREE.Mesh(outerRingGeom, titaniumRingMat2);
+    outerRingGroup.add(outerRingMesh);
+
+    // Satellite node on outer ring
+    const outerBeadGeom = new THREE.SphereGeometry(0.04, 12, 12);
+    disposables.push(outerBeadGeom);
+    const outerBead = new THREE.Mesh(outerBeadGeom, beaconMat);
+    outerBead.position.set(1.85, 0, 0);
+    outerRingGroup.add(outerBead);
+
+    // Floor Contact Shadow (Soft Radial Disc below sculpture)
+    const shadowGeom = new THREE.PlaneGeometry(3.0, 1.4);
+    disposables.push(shadowGeom);
+    const shadowCanvas = document.createElement("canvas");
+    shadowCanvas.width = 128;
+    shadowCanvas.height = 128;
+    const sCtx = shadowCanvas.getContext("2d");
+    if (sCtx) {
+      const grad = sCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, "rgba(0, 0, 0, 0.85)");
+      grad.addColorStop(0.5, "rgba(0, 0, 0, 0.4)");
+      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+      sCtx.fillStyle = grad;
+      sCtx.fillRect(0, 0, 128, 128);
+    }
+    const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+    disposables.push(shadowTex);
+    const shadowMat = new THREE.MeshBasicMaterial({
+      map: shadowTex,
+      transparent: true,
+      opacity: 0.85,
+      depthWrite: false,
+    });
+    disposables.push(shadowMat);
+    const shadowMesh = new THREE.Mesh(shadowGeom, shadowMat);
+    shadowMesh.position.set(0, -1.6, 0);
+    shadowMesh.rotation.x = -Math.PI / 2;
+    rootGroup.add(shadowMesh);
+
+    // 5. Responsive Resize
     const resize = () => {
-      const targetEl = canvasContainerRef.current;
-      if (!targetEl) return;
-      const rect = targetEl.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
-      width = rect.width;
-      height = rect.height;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      camera.aspect = rect.width / rect.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(rect.width, rect.height, false);
     };
 
     resize();
     const ro = new ResizeObserver(resize);
-    if (canvasContainerRef.current) {
-      ro.observe(canvasContainerRef.current);
-    }
+    ro.observe(container);
 
-    // Rotation angles
-    let angleX = 0.25;
-    let angleY = 0.45;
-    let angleZ = 0.12;
-    let lastTime = performance.now();
+    // 6. Interactive Inertia Drag / Pointer Move
+    const pointer = { targetX: 0, targetY: 0, currentX: 0, currentY: 0 };
+    let isDragging = false;
+    let prevMouseX = 0;
+    let prevMouseY = 0;
+
+    const handlePointerDown = (e: PointerEvent) => {
+      isDragging = true;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    };
 
     const handlePointerMove = (e: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-      mouseRef.current.targetX = nx * 0.7;
-      mouseRef.current.targetY = ny * 0.7;
+      if (isDragging) {
+        const dx = e.clientX - prevMouseX;
+        const dy = e.clientY - prevMouseY;
+        pointer.targetY += dx * 0.008;
+        pointer.targetX += dy * 0.008;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      } else {
+        const rect = container.getBoundingClientRect();
+        const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        pointer.targetY = nx * 0.45;
+        pointer.targetX = -ny * 0.35;
+      }
+    };
+
+    const handlePointerUp = () => {
+      isDragging = false;
     };
 
     const handlePointerLeave = () => {
-      mouseRef.current.targetX = 0;
-      mouseRef.current.targetY = 0;
+      isDragging = false;
+      pointer.targetX = 0;
+      pointer.targetY = 0;
     };
 
-    container.addEventListener("pointermove", handlePointerMove);
+    container.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
     container.addEventListener("pointerleave", handlePointerLeave);
 
-    // 3D Matrix Rotation (X, Y, Z Euler)
-    const rotate3D = (p: Point3D, rx: number, ry: number, rz: number): Point3D => {
-      const y1 = p.y * Math.cos(rx) - p.z * Math.sin(rx);
-      const z1 = p.y * Math.sin(rx) + p.z * Math.cos(rx);
+    // 7. Animation Loop
+    let rafId = 0;
+    const clock = new THREE.Clock();
 
-      const x2 = p.x * Math.cos(ry) + z1 * Math.sin(ry);
-      const z2 = -p.x * Math.sin(ry) + z1 * Math.cos(ry);
+    const render = () => {
+      if (document.hidden) {
+        rafId = requestAnimationFrame(render);
+        return;
+      }
 
-      const x3 = x2 * Math.cos(rz) - y1 * Math.sin(rz);
-      const y3 = x2 * Math.sin(rz) + y1 * Math.cos(rz);
-      return { x: x3, y: y3, z: z2 };
-    };
+      const elapsed = clock.getElapsedTime();
 
-    // Perspective projection onto screen
-    const fov = 3.4;
-    const project = (p: Point3D, cx: number, cy: number, radius: number): ProjectedPoint => {
-      const zOffset = p.z + fov;
-      const scale = fov / Math.max(zOffset, 0.1);
-      return {
-        x: cx + p.x * radius * scale,
-        y: cy + p.y * radius * scale,
-        z: p.z,
-        scale,
-      };
-    };
+      // Pointer inertia damping
+      pointer.currentX += (pointer.targetX - pointer.currentX) * 0.05;
+      pointer.currentY += (pointer.targetY - pointer.currentY) * 0.05;
 
-    // Virtual Studio Light Direction Vectors (normalized)
-    const light1 = { x: 0.52, y: -0.68, z: 0.52 }; // Overhead key light
-    const light2 = { x: -0.58, y: 0.42, z: 0.68 }; // Emerald rim/fill light
+      rootGroup.rotation.x = pointer.currentX;
+      rootGroup.rotation.y = pointer.currentY;
 
-    const render = (now: number) => {
-      const dt = Math.min((now - lastTime) / 1000, 0.08);
-      lastTime = now;
+      // Smooth, natural orbital kinetics
+      sculptureGroup.rotation.y += 0.003;
+      sculptureGroup.rotation.x = Math.sin(elapsed * 0.35) * 0.08;
 
-      // Inertial mouse damping
-      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.08;
-      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.08;
+      // Independent ring rotations
+      innerRingMesh.rotation.z += 0.0045;
+      outerRingMesh.rotation.z -= 0.0032;
 
-      // Slow luxury cinematic rotation
-      angleX += (0.16 + mouseRef.current.y * 0.6) * dt;
-      angleY += (0.24 + mouseRef.current.x * 0.6) * dt;
-      angleZ += 0.08 * dt;
+      // Animate satellite nodes on the rings
+      innerBead.position.x = Math.cos(elapsed * 0.8) * 1.48;
+      innerBead.position.y = Math.sin(elapsed * 0.8) * 1.48;
 
-      ctx.clearRect(0, 0, width, height);
+      outerBead.position.x = Math.cos(-elapsed * 0.6) * 1.85;
+      outerBead.position.y = Math.sin(-elapsed * 0.6) * 1.85;
 
-      const cx = width / 2;
-      const cy = height / 2;
-      const baseRadius = Math.min(width, height) * 0.32;
+      // Inner core breathing pulse
+      innerCoreMat.emissiveIntensity = 0.65 + Math.sin(elapsed * 2.0) * 0.28;
+      innerMesh.rotation.y -= 0.006;
+      innerMesh.rotation.z += 0.004;
 
-      // 1. Soft Dimensional Drop Shadow on Chamber Floor
-      const shadowY = cy + baseRadius * 1.25;
-      const shadowGrad = ctx.createRadialGradient(cx, shadowY, 0, cx, shadowY, baseRadius * 1.4);
-      shadowGrad.addColorStop(0, "rgba(0, 0, 0, 0.75)");
-      shadowGrad.addColorStop(0.5, "rgba(8, 14, 10, 0.35)");
-      shadowGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.save();
-      ctx.scale(1, 0.32);
-      ctx.fillStyle = shadowGrad;
-      ctx.beginPath();
-      ctx.arc(cx, shadowY / 0.32, baseRadius * 1.4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-
-      // 2. Ambient Volumetric Emerald Core Glow
-      const ambientGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseRadius * 1.5);
-      ambientGlow.addColorStop(0, "rgba(57, 255, 136, 0.16)");
-      ambientGlow.addColorStop(0.4, "rgba(109, 143, 99, 0.06)");
-      ambientGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = ambientGlow;
-      ctx.beginPath();
-      ctx.arc(cx, cy, baseRadius * 1.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 3. Render Three Dimensional Dark Chrome Orbital Rings
-      const rings = [
-        // Ring 1: Outer Dark Chrome Ring with bevels
-        {
-          radius: baseRadius * 1.62,
-          thickness: 3.5,
-          rx: angleX * 0.75,
-          ry: angleY * 0.55,
-          rz: 0.42,
-          segments: 56,
-          isChrome: true,
-        },
-        // Ring 2: Mid Titanium Gimbal Ring with emerald calibration marks
-        {
-          radius: baseRadius * 1.95,
-          thickness: 2.2,
-          rx: -angleX * 0.5,
-          ry: angleY * 0.85,
-          rz: -0.65,
-          segments: 64,
-          isChrome: false,
-        },
-        // Ring 3: Inner Counter-Rotating Ring
-        {
-          radius: baseRadius * 1.32,
-          thickness: 1.8,
-          rx: angleX * 0.4,
-          ry: -angleY * 0.65,
-          rz: 1.15,
-          segments: 48,
-          isChrome: false,
-        },
-      ];
-
-      rings.forEach((ring) => {
-        const ringPoints: ProjectedPoint[] = [];
-        for (let i = 0; i <= ring.segments; i++) {
-          const theta = (i / ring.segments) * Math.PI * 2;
-          const rawP: Point3D = {
-            x: Math.cos(theta),
-            y: 0,
-            z: Math.sin(theta),
-          };
-          const rotated = rotate3D(rawP, ring.rx, ring.ry, ring.rz);
-          ringPoints.push(project(rotated, cx, cy, ring.radius));
-        }
-
-        // Draw primary ring body
-        ctx.beginPath();
-        ctx.moveTo(ringPoints[0]!.x, ringPoints[0]!.y);
-        for (let i = 1; i < ringPoints.length; i++) {
-          ctx.lineTo(ringPoints[i]!.x, ringPoints[i]!.y);
-        }
-        ctx.strokeStyle = ring.isChrome ? "rgba(109, 143, 99, 0.45)" : "rgba(57, 255, 136, 0.35)";
-        ctx.lineWidth = ring.thickness;
-        ctx.stroke();
-
-        // Specular chrome edge highlight along ring
-        ctx.beginPath();
-        for (let i = 0; i < ringPoints.length; i++) {
-          const pt = ringPoints[i]!;
-          if (pt.z > 0.2) {
-            ctx.arc(pt.x, pt.y, ring.thickness * 0.7, 0, Math.PI * 2);
-          }
-        }
-        ctx.fillStyle = ring.isChrome ? "rgba(255, 255, 255, 0.3)" : "rgba(57, 255, 136, 0.45)";
-        ctx.fill();
-      });
-
-      // 4. Transform & Project All Sculpture Vertices
-      const transformedVertices = allVertices.map((v) => {
-        const rotated = rotate3D(v, angleX, angleY, angleZ);
-        const prj = project(rotated, cx, cy, baseRadius * 0.88);
-        return { rotated, prj };
-      });
-
-      // 5. Prepare and Depth-Sort Solid Faces (Painter's Algorithm)
-      type FaceData = {
-        indices: [number, number, number];
-        centerZ: number;
-        normalZ: number;
-        diffuse1: number;
-        diffuse2: number;
-        specular: number;
-        rim: number;
-      };
-
-      const faceList: FaceData[] = [];
-
-      rawFaces.forEach(([i1, i2, i3]) => {
-        const v1 = transformedVertices[i1]!.rotated;
-        const v2 = transformedVertices[i2]!.rotated;
-        const v3 = transformedVertices[i3]!.rotated;
-
-        // Normal Vector via Cross Product: (v2 - v1) x (v3 - v1)
-        const ax = v2.x - v1.x;
-        const ay = v2.y - v1.y;
-        const az = v2.z - v1.z;
-        const bx = v3.x - v1.x;
-        const by = v3.y - v1.y;
-        const bz = v3.z - v1.z;
-
-        let nx = ay * bz - az * by;
-        let ny = az * bx - ax * bz;
-        let nz = ax * by - ay * bx;
-        const len = Math.hypot(nx, ny, nz) || 1;
-        nx /= len;
-        ny /= len;
-        nz /= len;
-
-        // Back-face culling with soft threshold
-        if (nz < -0.2) return;
-
-        const centerZ = (v1.z + v2.z + v3.z) / 3;
-
-        // Physical lighting calculations
-        const d1 = Math.max(0, nx * light1.x + ny * light1.y + nz * light1.z);
-        const d2 = Math.max(0, nx * light2.x + ny * light2.y + nz * light2.z);
-
-        // Blinn-Phong specular highlight for dark chrome
-        const hx = light1.x;
-        const hy = light1.y;
-        const hz = light1.z + 1.0;
-        const hLen = Math.hypot(hx, hy, hz) || 1;
-        const specAngle = Math.max(0, (nx * hx + ny * hy + nz * hz) / hLen);
-        const spec = Math.pow(specAngle, 18);
-
-        // Emerald Fresnel Rim Lighting (high at grazing angles where nz is near 0)
-        const rimFactor = Math.pow(Math.max(0, 1 - Math.abs(nz)), 2.6);
-
-        faceList.push({
-          indices: [i1, i2, i3],
-          centerZ,
-          normalZ: nz,
-          diffuse1: d1,
-          diffuse2: d2,
-          specular: spec,
-          rim: rimFactor,
-        });
-      });
-
-      // Sort faces back to front
-      faceList.sort((a, b) => a.centerZ - b.centerZ);
-
-      // 6. Draw Inner Glowing Reactor Core before front faces
-      ctx.beginPath();
-      ctx.arc(cx, cy, baseRadius * 0.28, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(57, 255, 136, 0.4)";
-      ctx.fill();
-
-      // 7. Render Solid Shaded Metallic Faces
-      faceList.forEach((face) => {
-        const p1 = transformedVertices[face.indices[0]]!.prj;
-        const p2 = transformedVertices[face.indices[1]]!.prj;
-        const p3 = transformedVertices[face.indices[2]]!.prj;
-
-        // Calculate physical color channels for Black Titanium / Dark Chrome
-        const rVal = Math.min(
-          255,
-          Math.round(14 + face.diffuse1 * 26 + face.specular * 105 + face.rim * 20),
-        );
-        const gVal = Math.min(
-          255,
-          Math.round(
-            22 + face.diffuse1 * 36 + face.diffuse2 * 55 + face.specular * 190 + face.rim * 145,
-          ),
-        );
-        const bVal = Math.min(
-          255,
-          Math.round(18 + face.diffuse1 * 30 + face.specular * 110 + face.rim * 35),
-        );
-
-        // Solid shaded polygon face
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.lineTo(p3.x, p3.y);
-        ctx.closePath();
-
-        ctx.fillStyle = `rgb(${rVal}, ${gVal}, ${bVal})`;
-        ctx.fill();
-
-        // Metallic Chamfer Edge Highlight
-        ctx.strokeStyle = `rgba(57, 255, 136, ${0.18 + face.rim * 0.55 + face.specular * 0.45})`;
-        ctx.lineWidth = face.centerZ > 0 ? 1.4 : 0.8;
-        ctx.stroke();
-      });
-
-      // 8. Precision Vertex Beacons & Status Nodes
-      transformedVertices.forEach(({ prj, rotated }, idx) => {
-        if (rotated.z < -0.3) return;
-        const radius = (rotated.z > 0 ? 2.6 : 1.8) * prj.scale;
-        ctx.beginPath();
-        ctx.arc(prj.x, prj.y, radius, 0, Math.PI * 2);
-
-        if (idx === 0) {
-          // Alert telemetry beacon
-          ctx.fillStyle = "rgba(255, 0, 0, 0.95)";
-          ctx.fill();
-          ctx.strokeStyle = "rgba(255, 0, 0, 0.4)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(prj.x, prj.y, radius + 3, 0, Math.PI * 2);
-          ctx.stroke();
-        } else {
-          ctx.fillStyle = "rgba(57, 255, 136, 0.85)";
-          ctx.fill();
-        }
-      });
-
+      renderer.render(scene, camera);
       rafId = requestAnimationFrame(render);
     };
 
@@ -429,8 +359,13 @@ export function Hero3DObject() {
     return () => {
       cancelAnimationFrame(rafId);
       ro.disconnect();
-      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
       container.removeEventListener("pointerleave", handlePointerLeave);
+
+      disposables.forEach((item) => item.dispose());
+      renderer.dispose();
     };
   }, []);
 
@@ -439,65 +374,67 @@ export function Hero3DObject() {
       ref={containerRef}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative flex h-full min-h-[440px] max-h-[540px] w-full flex-col justify-between overflow-hidden rounded-lg border border-border bg-card/95 p-6 backdrop-blur-md shadow-[0_0_40px_rgba(0,0,0,0.85)] transition-all duration-300 hover:border-primary/50 group"
-      style={{ perspective: "1000px" }}
+      className="relative flex h-full min-h-[440px] max-h-[540px] w-full flex-col justify-between overflow-hidden rounded-lg border border-border/70 bg-[#070c09]/92 p-5 sm:p-6 backdrop-blur-md shadow-[0_0_35px_rgba(0,0,0,0.85)] transition-all duration-300 hover:border-primary/40 group"
     >
-      {/* 3D Corner Accent Brackets */}
-      <span className="pointer-events-none absolute top-0 left-0 h-4 w-4 border-t-2 border-l-2 border-moss/70" />
-      <span className="pointer-events-none absolute top-0 right-0 h-4 w-4 border-t-2 border-r-2 border-alert/80" />
-      <span className="pointer-events-none absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-alert/80" />
-      <span className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-moss/70" />
+      {/* Precision Micro-Accents */}
+      <div className="pointer-events-none absolute top-2 left-2 font-mono text-[8px] text-moss/50 tracking-widest">
+        // TITANIUM-CORE
+      </div>
+      <div className="pointer-events-none absolute top-2 right-2 font-mono text-[8px] text-primary/70 tracking-widest flex items-center gap-1.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+        {hovered ? "SYNCED" : "ONLINE"}
+      </div>
 
-      {/* Top Telemetry Header */}
-      <div className="relative z-10 flex items-center justify-between border-b border-border/80 pb-3 font-mono text-[10px] tracking-[0.25em]">
+      {/* Top Header */}
+      <div className="relative z-10 flex items-center justify-between border-b border-border/80 pt-1 pb-3 font-mono text-[10px] tracking-[0.25em]">
         <div className="flex items-center gap-2 text-primary">
-          <span className="h-2 w-[2px] bg-alert" />
-          <span>CYBER CORE // TITANIUM SCULPTURE</span>
+          <span className="h-2 w-[2px] bg-primary" />
+          <span>TITANIUM SCULPTURE // 3D CORE</span>
         </div>
-        <div className="flex items-center gap-2 text-[9px] text-primary text-glow">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          <span>{hovered ? "SYNCED" : "ORBITAL"}</span>
+        <div className="text-[9px] text-moss font-mono tracking-widest hidden sm:block">
+          ORBITAL GIMBAL
         </div>
       </div>
 
-      {/* Center Interactive 3D Canvas */}
-      <div
-        ref={canvasContainerRef}
-        className="relative flex-1 min-h-[260px] max-h-[360px] w-full overflow-hidden py-2"
-      >
+      {/* Center 3D WebGL Canvas */}
+      <div className="relative flex-1 min-h-[260px] max-h-[350px] w-full overflow-hidden py-1">
         <canvas
           ref={canvasRef}
           className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing"
-          aria-label="Floating Dark Chrome and Black Titanium Geometric Sculpture"
+          aria-label="Floating Black Chrome and Titanium 3D Sculpture"
         />
-        <div className="pointer-events-none absolute bottom-1 right-2 z-10 font-mono text-[8px] tracking-[0.2em] text-moss/70">
+        <div className="pointer-events-none absolute bottom-1 right-2 z-10 font-mono text-[8px] tracking-[0.2em] text-moss/60">
           DRAG / HOVER TO ROTATE
         </div>
       </div>
 
-      {/* Bottom Focus Areas Deck */}
-      <div className="relative z-10 border-t border-border/80 pt-4 font-mono">
-        <div className="mb-2.5 flex items-center justify-between text-[9px] tracking-[0.25em] text-primary/80">
+      {/* Bottom Operator Priorities Deck */}
+      <div className="relative z-10 border-t border-border/80 pt-3.5 font-mono">
+        <div className="mb-2.5 flex items-center justify-between text-[9px] tracking-[0.2em] text-primary/85">
           <span>OPERATOR PRIORITIES</span>
           <span className="text-moss">2026 // DEFENSE</span>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-[11px] tracking-wider sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {[
-            { label: "SECURITY", code: "SEC-01" },
-            { label: "INNOVATION", code: "INN-02" },
-            { label: "RESILIENCE", code: "RES-03" },
-            { label: "A BETTER FUTURE", code: "FUT-04", highlight: true },
+            { code: "SEC-01", label: "SECURITY" },
+            { code: "INN-02", label: "INNOVATION" },
+            { code: "RES-03", label: "RESILIENCE" },
+            { code: "FUT-04", label: "A BETTER FUTURE", highlight: true },
           ].map((item) => (
             <div
-              key={item.label}
-              className={`rounded-sm border p-2 text-center transition-colors ${
+              key={item.code}
+              className={`flex flex-col items-center justify-center rounded border px-2 py-2 text-center transition-all ${
                 item.highlight
-                  ? "border-primary/40 bg-primary/10 text-primary text-glow font-bold"
+                  ? "border-primary/50 bg-primary/10 text-primary text-glow font-bold"
                   : "border-moss/30 bg-background/80 text-foreground hover:border-primary/40"
               }`}
             >
-              <div className="text-[7.5px] tracking-widest text-primary/70">{item.code}</div>
-              <div className="mt-0.5 truncate text-[10px] font-semibold">{item.label}</div>
+              <span className="text-[8px] sm:text-[8.5px] tracking-widest text-primary/70">
+                {item.code}
+              </span>
+              <span className="mt-0.5 text-[9px] sm:text-[10px] font-semibold tracking-wide whitespace-nowrap">
+                {item.label}
+              </span>
             </div>
           ))}
         </div>

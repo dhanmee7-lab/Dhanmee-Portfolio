@@ -23,7 +23,7 @@ export function Credentials() {
         <TiltCard intensity={5} glareOpacity={0.08} className="[transform-style:preserve-3d]">
           <div className="hud-panel p-7 [transform-style:preserve-3d]">
             <span
-              className="pointer-events-none absolute top-0 right-0 h-3.5 w-3.5 border-t-2 border-r-2 border-alert/75 [transform:translateZ(14px)]"
+              className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-moss/45 [transform:translateZ(14px)]"
               aria-hidden="true"
             />
             <div className="flex items-center gap-3 [transform:translateZ(18px)]">

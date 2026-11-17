@@ -37,7 +37,7 @@ export function Contact() {
             >
               <div className="hud-panel flex flex-col items-center text-center p-8 h-full transition-colors hover:border-primary/60 group [transform-style:preserve-3d]">
                 <span
-                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75 [transform:translateZ(12px)]"
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-moss/45 [transform:translateZ(12px)]"
                   aria-hidden="true"
                 />
                 <span className="flex h-12 w-12 items-center justify-center rounded-md border border-moss/45 bg-background text-primary group-hover:border-primary transition-colors mb-6 [transform:translateZ(20px)] shadow-[0_0_15px_rgba(57,255,136,0.1)]">

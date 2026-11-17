@@ -24,7 +24,7 @@ export function Skills() {
             <TiltCard>
               <div className="hud-panel h-full p-6">
                 <span
-                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-alert/75"
+                  className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-moss/45"
                   aria-hidden="true"
                 />
                 <div className="mb-5 flex items-center justify-between [transform:translateZ(20px)]">
