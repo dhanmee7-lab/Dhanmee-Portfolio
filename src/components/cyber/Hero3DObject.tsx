@@ -367,7 +367,10 @@ export function Hero3DObject() {
       </div>
 
       {/* Center Interactive 3D Canvas */}
-      <div ref={canvasContainerRef} className="relative flex-1 min-h-[260px] max-h-[360px] w-full overflow-hidden py-2">
+      <div
+        ref={canvasContainerRef}
+        className="relative flex-1 min-h-[260px] max-h-[360px] w-full overflow-hidden py-2"
+      >
         <canvas
           ref={canvasRef}
           className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing"
