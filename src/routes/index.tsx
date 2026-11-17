@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { BootSequence } from "@/components/cyber/BootSequence";
-import { EmeraldAuroraBackground } from "@/components/cyber/EmeraldAuroraBackground";
+import { DarkMetallicBackground } from "@/components/cyber/DarkMetallicBackground";
 import { CursorGlow } from "@/components/cyber/CursorGlow";
 import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
@@ -40,7 +40,7 @@ function Index() {
   return (
     <>
       {!booted && <BootSequence onDone={() => setBooted(true)} />}
-      <EmeraldAuroraBackground />
+      <DarkMetallicBackground />
       <CursorGlow />
 
       <motion.main

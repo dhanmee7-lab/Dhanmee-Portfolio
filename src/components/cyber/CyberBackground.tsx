@@ -1,1 +1,2 @@
-export { EmeraldAuroraBackground as CyberBackground } from "./EmeraldAuroraBackground";
+export { DarkMetallicBackground as CyberBackground } from "./DarkMetallicBackground";
+export { DarkMetallicBackground } from "./DarkMetallicBackground";
