@@ -3,14 +3,15 @@ import * as THREE from "three";
 
 /**
  * Premium Floating Black-Chrome and Brushed-Titanium 3D Sculpture
+ * with Dual Emerald & Electric Cobalt Blue Studio Lighting
  * - Sophisticated faceted dodecahedral titanium centerpiece with studio specular luster
- * - Physically based materials (metalness 0.90, roughness 0.22, flat-faceted shading)
- * - Studio environment map providing authentic chrome reflections and emerald rim highlights
- * - Inner glowing emerald reactor core pulsing with gentle respiratory frequency
- * - Two proportionate, solid metallic orbital rings angled in 3D space with independent kinetic rotation
- * - Precision satellite beacon nodes tracing orbits
+ * - Physical facet shading catching Neon Emerald (#39FF88) on one side and Electric Cobalt Blue (#245BFF) on the opposing flank
+ * - Studio PMREM environment map providing authentic dual-tone physical reflections
+ * - Inner glowing emerald reactor core pulsing with gentle respiratory rhythm
+ * - Two proportionate, solid metallic orbital rings with independent rotation:
+ *   Inner ring with subtle emerald sheen; outer ring with restrained cobalt-blue reflection
+ * - Paired satellite beacon nodes (Emerald & Cobalt Blue) tracing orbits
  * - Grounded floor contact shadow
- * - Pointer-driven inertia tilt and smooth natural animation
  * - Full operator priorities panel with completely rendered labels (never truncated)
  */
 export function Hero3DObject() {
@@ -66,13 +67,21 @@ export function Hero3DObject() {
       envCtx.fillStyle = keyGrad;
       envCtx.fillRect(40, 0, 200, 160);
 
-      // Neon emerald rim light strip
+      // Neon emerald rim light strip (Right Flank)
       const rimGrad = envCtx.createRadialGradient(380, 120, 0, 380, 120, 90);
       rimGrad.addColorStop(0, "#39ff88");
       rimGrad.addColorStop(0.4, "#1d723f");
       rimGrad.addColorStop(1, "transparent");
       envCtx.fillStyle = rimGrad;
       envCtx.fillRect(290, 30, 180, 180);
+
+      // Electric Cobalt Blue reflection softbox (Left Flank)
+      const cobaltGrad = envCtx.createRadialGradient(80, 180, 0, 80, 180, 75);
+      cobaltGrad.addColorStop(0, "#245bff");
+      cobaltGrad.addColorStop(0.35, "#0c2368");
+      cobaltGrad.addColorStop(1, "transparent");
+      envCtx.fillStyle = cobaltGrad;
+      envCtx.fillRect(10, 110, 150, 140);
 
       // Moss fill reflection
       const fillGrad = envCtx.createRadialGradient(256, 210, 0, 256, 210, 80);
@@ -88,19 +97,25 @@ export function Hero3DObject() {
     envTexture.dispose();
     pmremGenerator.dispose();
 
-    // Direct Studio Lights
-    const ambientLight = new THREE.AmbientLight(0x0c1810, 0.85);
+    // Direct Studio Lights: Balanced Dual Rim Lighting
+    const ambientLight = new THREE.AmbientLight(0x0a1412, 0.85);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 3.4);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
     keyLight.position.set(-3.5, 4.5, 4.2);
     scene.add(keyLight);
 
-    const emeraldRimLight = new THREE.DirectionalLight(0x39ff88, 3.8);
-    emeraldRimLight.position.set(3.8, -2.2, -2.5);
+    // Primary Neon Emerald Rim Light (Right Flank)
+    const emeraldRimLight = new THREE.DirectionalLight(0x39ff88, 3.6);
+    emeraldRimLight.position.set(4.0, -2.0, -2.5);
     scene.add(emeraldRimLight);
 
-    const fillLight = new THREE.PointLight(0x6d8f63, 1.8, 12);
+    // Secondary Electric Cobalt Blue Rim Light (Left Flank — Opposing Side)
+    const cobaltRimLight = new THREE.DirectionalLight(0x245bff, 2.6);
+    cobaltRimLight.position.set(-4.0, 2.0, -2.2);
+    scene.add(cobaltRimLight);
+
+    const fillLight = new THREE.PointLight(0x6d8f63, 1.4, 12);
     fillLight.position.set(0, 3, 2);
     scene.add(fillLight);
 
@@ -115,21 +130,23 @@ export function Hero3DObject() {
       envMapIntensity: 1.4,
     });
 
+    // Inner Ring: Titanium with subtle emerald rim reflection
     const titaniumRingMat1 = new THREE.MeshStandardMaterial({
-      color: 0x24362b,
+      color: 0x22362b,
       metalness: 0.95,
       roughness: 0.16,
-      emissive: 0x082414,
+      emissive: 0x062012,
       emissiveIntensity: 0.25,
       envMapIntensity: 1.6,
     });
 
+    // Outer Ring: Titanium with restrained Electric Cobalt Blue reflection
     const titaniumRingMat2 = new THREE.MeshStandardMaterial({
-      color: 0x1c2a22,
+      color: 0x182436,
       metalness: 0.95,
       roughness: 0.18,
-      emissive: 0x051c0f,
-      emissiveIntensity: 0.2,
+      emissive: 0x071530,
+      emissiveIntensity: 0.35,
       envMapIntensity: 1.5,
     });
 
@@ -142,8 +159,12 @@ export function Hero3DObject() {
       flatShading: true,
     });
 
-    const beaconMat = new THREE.MeshBasicMaterial({
+    const emeraldBeaconMat = new THREE.MeshBasicMaterial({
       color: 0x39ff88,
+    });
+
+    const cobaltBeaconMat = new THREE.MeshBasicMaterial({
+      color: 0x245bff,
     });
 
     // Tracking for cleanup
@@ -153,7 +174,8 @@ export function Hero3DObject() {
       titaniumRingMat1,
       titaniumRingMat2,
       innerCoreMat,
-      beaconMat,
+      emeraldBeaconMat,
+      cobaltBeaconMat,
     ];
 
     // Root interactive group
@@ -170,7 +192,7 @@ export function Hero3DObject() {
     const outerMesh = new THREE.Mesh(outerGeom, darkTitaniumMat);
     sculptureGroup.add(outerMesh);
 
-    // Refined subtle edge wire highlight (emerald reflection on chamfers)
+    // Refined subtle edge wire highlight (chamfer reflection)
     const wireGeom = new THREE.WireframeGeometry(outerGeom);
     disposables.push(wireGeom);
     const wireMat = new THREE.LineBasicMaterial({
@@ -189,7 +211,7 @@ export function Hero3DObject() {
     sculptureGroup.add(innerMesh);
 
     // 4. Two Proportionate, Solid Metallic Orbital Rings
-    // Inner Ring: Radius 1.48, Tube 0.032
+    // Inner Ring (Emerald Rim Accented): Radius 1.48, Tube 0.032
     const innerRingGeom = new THREE.TorusGeometry(1.48, 0.032, 16, 96);
     disposables.push(innerRingGeom);
 
@@ -200,14 +222,14 @@ export function Hero3DObject() {
     const innerRingMesh = new THREE.Mesh(innerRingGeom, titaniumRingMat1);
     innerRingGroup.add(innerRingMesh);
 
-    // Satellite node on inner ring
+    // Satellite node on inner ring (Neon Emerald)
     const innerBeadGeom = new THREE.SphereGeometry(0.045, 12, 12);
     disposables.push(innerBeadGeom);
-    const innerBead = new THREE.Mesh(innerBeadGeom, beaconMat);
+    const innerBead = new THREE.Mesh(innerBeadGeom, emeraldBeaconMat);
     innerBead.position.set(1.48, 0, 0);
     innerRingGroup.add(innerBead);
 
-    // Outer Ring: Radius 1.85, Tube 0.026
+    // Outer Ring (Electric Cobalt Blue Accented): Radius 1.85, Tube 0.026
     const outerRingGeom = new THREE.TorusGeometry(1.85, 0.026, 16, 96);
     disposables.push(outerRingGeom);
 
@@ -218,10 +240,10 @@ export function Hero3DObject() {
     const outerRingMesh = new THREE.Mesh(outerRingGeom, titaniumRingMat2);
     outerRingGroup.add(outerRingMesh);
 
-    // Satellite node on outer ring
+    // Satellite node on outer ring (Electric Cobalt Blue)
     const outerBeadGeom = new THREE.SphereGeometry(0.04, 12, 12);
     disposables.push(outerBeadGeom);
-    const outerBead = new THREE.Mesh(outerBeadGeom, beaconMat);
+    const outerBead = new THREE.Mesh(outerBeadGeom, cobaltBeaconMat);
     outerBead.position.set(1.85, 0, 0);
     outerRingGroup.add(outerBead);
 
@@ -235,7 +257,7 @@ export function Hero3DObject() {
     if (sCtx) {
       const grad = sCtx.createRadialGradient(64, 64, 0, 64, 64, 64);
       grad.addColorStop(0, "rgba(0, 0, 0, 0.85)");
-      grad.addColorStop(0.5, "rgba(0, 0, 0, 0.4)");
+      grad.addColorStop(0.4, "rgba(0, 0, 0, 0.4)");
       grad.addColorStop(1, "rgba(0, 0, 0, 0)");
       sCtx.fillStyle = grad;
       sCtx.fillRect(0, 0, 128, 128);
@@ -374,7 +396,7 @@ export function Hero3DObject() {
       ref={containerRef}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative flex h-full min-h-[440px] max-h-[540px] w-full flex-col justify-between overflow-hidden rounded-lg border border-border/70 bg-[#070c09]/92 p-5 sm:p-6 backdrop-blur-md shadow-[0_0_35px_rgba(0,0,0,0.85)] transition-all duration-300 hover:border-primary/40 group"
+      className="relative flex h-full min-h-[440px] max-h-[540px] w-full flex-col justify-between overflow-hidden rounded-lg border border-border/70 bg-[#070c09]/92 p-5 sm:p-6 backdrop-blur-md shadow-[0_0_35px_rgba(0,0,0,0.85)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_35px_rgba(0,0,0,0.85),0_0_22px_rgba(36,91,255,0.12)] group"
     >
       {/* Precision Micro-Accents */}
       <div className="pointer-events-none absolute top-2 left-2 font-mono text-[8px] text-moss/50 tracking-widest">

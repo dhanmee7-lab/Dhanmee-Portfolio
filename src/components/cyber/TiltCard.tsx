@@ -87,11 +87,11 @@ export function TiltCard({
         aria-hidden="true"
       />
 
-      {/* Subtle border sheen illumination */}
+      {/* Subtle border sheen illumination with emerald-cobalt mixed lighting */}
       <div
         className="pointer-events-none absolute -inset-[1px] z-20 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(circle 260px at ${glarePos.x}% ${glarePos.y}%, rgba(57, 255, 136, 0.4), transparent 70%)`,
+          background: `radial-gradient(circle 260px at ${glarePos.x}% ${glarePos.y}%, rgba(57, 255, 136, 0.35) 0%, rgba(36, 91, 255, 0.22) 55%, transparent 75%)`,
           mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskComposite: "xor",

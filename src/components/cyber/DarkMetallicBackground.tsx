@@ -2,16 +2,15 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 /**
- * Realistic Cinematic 3D Titanium Background
+ * Realistic Cinematic 3D Titanium Background with Dual Cobalt & Emerald Lighting
  * - Three genuine 3D perspective depth layers (Foreground, Midground, Background)
- * - Authentic architectural dark brushed titanium columns, structural pylons & chrome trusses
  * - Studio PMREM environment map providing authentic physical reflections on dark titanium
- * - Cinematic studio illumination: Key white light, volumetric neon emerald rim lighting, moss green fill
+ * - Dual cinematic studio illumination: Primary Neon Emerald (#39FF88) rim on one flank,
+ *   secondary Electric Cobalt Blue (#245BFF) ambient illumination on the opposing flank
+ * - Mixed floating micro-dust particles: 80% emerald, 20% cobalt blue for atmospheric depth
  * - Unobstructed central column ensuring 100% text legibility across all sections
  * - Smooth camera scroll & pointer parallax across the full website
  * - 60 FPS performance: optimized geometries, pixel ratio clamping, pauses on tab hide
- * - Respects prefers-reduced-motion with gentle kinetic breathing
- * - Full website continuity across all sections
  */
 export function DarkMetallicBackground() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +66,7 @@ export function DarkMetallicBackground() {
       envCtx.fillStyle = "#020503";
       envCtx.fillRect(0, 0, 512, 256);
 
-      // Studio key softbox reflection
+      // Studio key softbox reflection (white-emerald specular)
       const keyGrad = envCtx.createRadialGradient(140, 60, 0, 140, 60, 110);
       keyGrad.addColorStop(0, "#ffffff");
       keyGrad.addColorStop(0.35, "#e5faee");
@@ -76,7 +75,7 @@ export function DarkMetallicBackground() {
       envCtx.fillStyle = keyGrad;
       envCtx.fillRect(40, 0, 200, 160);
 
-      // Neon emerald rim light strip
+      // Neon emerald rim light strip (Right Flank)
       const rimGrad = envCtx.createRadialGradient(380, 110, 0, 380, 110, 100);
       rimGrad.addColorStop(0, "#39ff88");
       rimGrad.addColorStop(0.45, "#13542c");
@@ -84,7 +83,16 @@ export function DarkMetallicBackground() {
       envCtx.fillStyle = rimGrad;
       envCtx.fillRect(280, 20, 200, 180);
 
-      // Moss fill reflection
+      // Electric Cobalt Blue rim light reflection strip (Left Flank)
+      const cobaltGrad = envCtx.createRadialGradient(90, 160, 0, 90, 160, 85);
+      cobaltGrad.addColorStop(0, "#245bff");
+      cobaltGrad.addColorStop(0.35, "#0d2260");
+      cobaltGrad.addColorStop(0.8, "#040b20");
+      cobaltGrad.addColorStop(1, "transparent");
+      envCtx.fillStyle = cobaltGrad;
+      envCtx.fillRect(10, 80, 160, 160);
+
+      // Muted moss fill reflection
       const fillGrad = envCtx.createRadialGradient(256, 210, 0, 256, 210, 80);
       fillGrad.addColorStop(0, "#6d8f63");
       fillGrad.addColorStop(1, "transparent");
@@ -99,25 +107,30 @@ export function DarkMetallicBackground() {
     pmremGenerator.dispose();
 
     // Direct Studio Lights
-    const ambientLight = new THREE.AmbientLight(0x0a160f, 0.9);
+    const ambientLight = new THREE.AmbientLight(0x091410, 0.85);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xe8fff0, 2.4);
+    const keyLight = new THREE.DirectionalLight(0xe8fff0, 2.2);
     keyLight.position.set(-18, 22, 16);
     scene.add(keyLight);
 
-    // Hero neon emerald volumetric rim light
-    const emeraldRimLight = new THREE.PointLight(0x39ff88, 5.5, 65, 1.6);
-    emeraldRimLight.position.set(12, 6, -4);
+    // Primary Neon Emerald Rim Light (Right Flank)
+    const emeraldRimLight = new THREE.PointLight(0x39ff88, 5.0, 65, 1.6);
+    emeraldRimLight.position.set(14, 6, -4);
     scene.add(emeraldRimLight);
 
-    // Secondary fill light (muted moss green)
-    const fillLight = new THREE.DirectionalLight(0x6d8f63, 1.2);
+    // Secondary Electric Cobalt Blue Ambient Rim Light (Left Flank)
+    const cobaltRimLight = new THREE.DirectionalLight(0x245bff, 1.4);
+    cobaltRimLight.position.set(-16, -10, -6);
+    scene.add(cobaltRimLight);
+
+    // Fill light (muted moss green)
+    const fillLight = new THREE.DirectionalLight(0x6d8f63, 1.0);
     fillLight.position.set(16, -18, 10);
     scene.add(fillLight);
 
-    // Bottom horizon bounce light
-    const bottomBounce = new THREE.PointLight(0x0e2b17, 2.5, 50, 1.6);
+    // Horizon bounce light (deep titanium-cobalt bounce)
+    const bottomBounce = new THREE.PointLight(0x08182b, 2.2, 50, 1.6);
     bottomBounce.position.set(0, -22, -12);
     scene.add(bottomBounce);
 
@@ -222,7 +235,6 @@ export function DarkMetallicBackground() {
     const fgGroup = new THREE.Group();
     worldGroup.add(fgGroup);
 
-    // Peripheral architectural framing rails at screen edges
     const frameRailGeom = new THREE.BoxGeometry(0.35, 42, 0.35);
     disposables.push(frameRailGeom);
 
@@ -236,11 +248,15 @@ export function DarkMetallicBackground() {
     rightRail.rotation.y = -0.12;
     fgGroup.add(rightRail);
 
-    // Floating metallic dust particles in genuine 3D space
+    // Floating metallic micro-dust particles (80% emerald, 20% cobalt blue)
     const particleCount = window.innerWidth < 768 ? 35 : 75;
     const particleGeom = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
     const particleSpeeds = new Float32Array(particleCount * 3);
+
+    const cEmerald = new THREE.Color(0x39ff88);
+    const cCobalt = new THREE.Color(0x245bff);
 
     for (let i = 0; i < particleCount; i++) {
       particlePositions[i * 3] = (Math.random() - 0.5) * 32;
@@ -250,17 +266,25 @@ export function DarkMetallicBackground() {
       particleSpeeds[i * 3] = (Math.random() - 0.5) * 0.003;
       particleSpeeds[i * 3 + 1] = -(Math.random() * 0.006 + 0.002);
       particleSpeeds[i * 3 + 2] = (Math.random() - 0.5) * 0.002;
+
+      // 20% Electric Cobalt Blue, 80% Neon Emerald
+      const isCobalt = i % 5 === 0;
+      const col = isCobalt ? cCobalt : cEmerald;
+      particleColors[i * 3] = col.r;
+      particleColors[i * 3 + 1] = col.g;
+      particleColors[i * 3 + 2] = col.b;
     }
 
     const positionAttr = new THREE.BufferAttribute(particlePositions, 3);
     particleGeom.setAttribute("position", positionAttr);
+    particleGeom.setAttribute("color", new THREE.BufferAttribute(particleColors, 3));
     disposables.push(particleGeom);
 
     const particleMat = new THREE.PointsMaterial({
-      color: 0x39ff88,
       size: 0.13,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.7,
       blending: THREE.AdditiveBlending,
     });
     disposables.push(particleMat);
@@ -374,7 +398,7 @@ export function DarkMetallicBackground() {
         positionAttr.needsUpdate = true;
 
         // Dynamic emerald rim light tracking
-        emeraldRimLight.position.x = 12 + Math.sin(elapsedTime * 0.3) * 2;
+        emeraldRimLight.position.x = 14 + Math.sin(elapsedTime * 0.3) * 2;
         emeraldRimLight.position.y = 6 + Math.cos(elapsedTime * 0.25) * 2 - scrollProgress * 12;
       }
 

@@ -21,7 +21,7 @@ const buttonVariants = cva(
         cyber:
           "border border-primary/65 bg-card text-primary font-semibold tracking-wide uppercase neon-ring hover:-translate-y-0.5 hover:bg-primary/15 hover:border-primary hover:neon-ring-strong hover:shadow-[0_8px_22px_-4px_rgba(57,255,136,0.4)] transition-all",
         ghostCyber:
-          "border border-border bg-card text-foreground tracking-wide uppercase backdrop-blur hover:-translate-y-0.5 hover:border-alert/75 hover:text-primary hover:shadow-[0_8px_20px_-6px_rgba(255,0,0,0.3)] transition-all",
+          "border border-border bg-card text-foreground tracking-wide uppercase backdrop-blur hover:-translate-y-0.5 hover:border-[#245BFF]/65 hover:text-foreground hover:shadow-[0_8px_20px_-6px_rgba(36,91,255,0.35)] transition-all",
       },
       size: {
         default: "h-9 px-4 py-2",
